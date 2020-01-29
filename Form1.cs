@@ -91,9 +91,17 @@ namespace Chrome_Updater
                     checkBox1.Checked = true;
                     CheckButton();
                 }
-                else if (File.Exists(@"Chrome\Chrome.exe"))
+                else if (!checkBox1.Checked)
                 {
-                    CheckButton2();
+                    checkBox2.Enabled = false;
+                    checkBox3.Enabled = false;
+                    button9.Enabled = false;
+                    button9.BackColor = Color.FromArgb(244, 244, 244);
+
+                    if (File.Exists(@"Chrome\Chrome.exe"))
+                    {
+                        CheckButton2();
+                    }
                 }
             }
             else if (IntPtr.Size != 8)
@@ -104,9 +112,16 @@ namespace Chrome_Updater
                     checkBox2.Enabled = false;
                     CheckButton();
                 }
-                else if (File.Exists(@"Chrome\Chrome.exe"))
+                else if (!checkBox1.Checked)
                 {
-                    CheckButton2();
+                    checkBox2.Enabled = false;
+                    button9.Enabled = false;
+                    button9.BackColor = Color.FromArgb(244, 244, 244);
+
+                    if (File.Exists(@"Chrome\Chrome.exe"))
+                    {
+                        CheckButton2();
+                    }
                 }
             }
         }
