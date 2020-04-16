@@ -4,10 +4,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Globalization;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Chrome_Updater
 {
@@ -125,136 +127,181 @@ namespace Chrome_Updater
                 }
             }
         }
-        private void Button1_Click(object sender, EventArgs e)
+        private async void Button1_Click(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
             {
-                NewMethod(0, 0, 0, 5, 18, 17, 1);
+                await NewMethod(0, 0, 0, 1);
             }
             else if (!checkBox1.Checked)
             {
-                NewMethod1(0, 0, 1);
+                await NewMethod1(0, 0, 1);
             }
         }
-        private void Button2_Click(object sender, EventArgs e)
+        private async void Button2_Click(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
             {
-                NewMethod(1, 1, 0, 6, 20, 19, 2);
+                await NewMethod(1, 1, 0, 2);
             }
             if (!checkBox1.Checked)
             {
-                NewMethod1(1, 0, 2);
+                await NewMethod1(1, 0, 2);
             }
         }
-        private void Button3_Click(object sender, EventArgs e)
+        private async void Button3_Click(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
             {
-                NewMethod(2, 2, 0, 7, 22, 21, 3);
+                await NewMethod(2, 2, 0, 3);
             }
             else if (!checkBox1.Checked)
             {
-                NewMethod1(2, 0, 3);
+                await NewMethod1(2, 0, 3);
             }
         }
-        private void Button4_Click(object sender, EventArgs e)
+        private async void Button4_Click(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
             {
-                NewMethod(3, 3, 0, 8, 24, 23, 4);
+                await NewMethod(3, 3, 0, 4);
             }
             else if (!checkBox1.Checked)
             {
-                NewMethod1(3, 0, 4);
+                await NewMethod1(3, 0, 4);
             }
         }
-        private void Button5_Click(object sender, EventArgs e)
+        private async void Button5_Click(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
             {
-                NewMethod(0, 4, 1, 4, 15, 16, 5);
+                await NewMethod(0, 4, 1, 5);
             }
             else if (!checkBox1.Checked)
             {
-                NewMethod1(0, 1, 5);
+                await NewMethod1(0, 1, 5);
             }
         }
-        private void Button6_Click(object sender, EventArgs e)
+        private async void Button6_Click(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
             {
-                NewMethod(1, 5, 1, 3, 13, 14, 6);
+                await NewMethod(1, 5, 1, 6);
             }
             else if (!checkBox1.Checked)
             {
-                NewMethod1(1, 1, 6);
+                await NewMethod1(1, 1, 6);
             }
         }
-        private void Button7_Click(object sender, EventArgs e)
+        private async void Button7_Click(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
             {
-                NewMethod(2, 6, 1, 1, 11, 12, 7);
+                await NewMethod(2, 6, 1, 7);
             }
             else if (!checkBox1.Checked)
             {
-                NewMethod1(2, 1, 7);
+                await NewMethod1(2, 1, 7);
             }
         }
-        private void Button8_Click(object sender, EventArgs e)
+        private async void Button8_Click(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
             {
-                NewMethod(3, 7, 1, 2, 27, 28, 8);
+                await NewMethod(3, 7, 1, 8);
             }
             else if (!checkBox1.Checked)
             {
-                NewMethod1(3, 1, 8);
+                await NewMethod1(3, 1, 8);
             }
         }
-        private void Button9_Click(object sender, EventArgs e)
+        private async void Button9_Click(object sender, EventArgs e)
+        {
+            await Testing();
+        }
+        private async Task Testing()
         {
             if ((!Directory.Exists(@"Chrome Canary x86")) && (!Directory.Exists(@"Chrome Dev x86")) && (!Directory.Exists(@"Chrome Beta x86")) && (!Directory.Exists(@"Chrome Stable x86")))
             {
                 if (checkBox2.Checked)
                 {
-                    DownloadFile(0, 0, 0, 5, 18, 17, 1);
-                    DownloadFile(1, 1, 0, 6, 20, 19, 2);
-                    DownloadFile(2, 2, 0, 7, 22, 21, 3);
-                    DownloadFile(3, 3, 0, 8, 24, 23, 4);
+                    await DownloadFile(0, 0, 0, 1);
+                    await DownloadFile(1, 1, 0, 2);
+                    await DownloadFile(2, 2, 0, 3);
+                    await DownloadFile(3, 3, 0, 4);
                     checkBox2.Enabled = false;
                 }
             }
-            NewMethod2(0, 0, 0, 5, 18, 17, 1);
-            NewMethod2(1, 1, 0, 6, 20, 19, 2);
-            NewMethod2(2, 2, 0, 7, 22, 21, 3);
-            NewMethod2(3, 3, 0, 8, 24, 23, 4);
+            await NewMethod2(0, 0, 0, 1);
+            await NewMethod2(1, 1, 0, 2);
+            await NewMethod2(2, 2, 0, 3);
+            await NewMethod2(3, 3, 0, 4);
             if (IntPtr.Size == 8)
             {
                 if ((!Directory.Exists(@"Chrome Canary x64")) && (!Directory.Exists(@"Chrome Dev x64")) && (!Directory.Exists(@"Chrome Beta x64")) && (!Directory.Exists(@"Chrome Stable x64")))
                 {
                     if (checkBox3.Checked)
                     {
-                        DownloadFile(0, 4, 1, 4, 15, 16, 5);
-                        DownloadFile(1, 5, 1, 3, 13, 14, 6);
-                        DownloadFile(2, 6, 1, 1, 11, 12, 7);
-                        DownloadFile(3, 7, 1, 2, 27, 28, 8);
+                        await DownloadFile(0, 4, 1, 5);
+                        await DownloadFile(1, 5, 1, 6);
+                        await DownloadFile(2, 6, 1, 7);
+                        await DownloadFile(3, 7, 1, 8);
                         checkBox3.Enabled = false;
                     }
                 }
-                NewMethod2(0, 4, 1, 4, 15, 16, 5);
-                NewMethod2(1, 5, 1, 3, 13, 14, 6);
-                NewMethod2(2, 6, 1, 1, 11, 12, 7);
-                NewMethod2(3, 7, 1, 2, 27, 28, 8);
+                await NewMethod2(0, 4, 1, 5);
+                await NewMethod2(1, 5, 1, 6);
+                await NewMethod2(2, 6, 1, 7);
+                await NewMethod2(3, 7, 1, 8);
             }
         }
-        public void DownloadFile(int i, int f, int e, int a, int b, int c, int d)
+        public async Task DownloadFile(int a, int b, int c, int d)
         {
+            GroupBox progressBox = new GroupBox
+            {
+                Location = new Point(10, button10.Location.Y + button10.Height + 5),
+                Size = new Size(groupBox3.Width, 90),
+                BackColor = Color.Lavender,
+            };
+            Label title = new Label
+            {
+                AutoSize = false,
+                Location = new Point(2, 10),
+                Size = new Size(progressBox.Width - 4, 25),
+                Text = "Chrome " + ring[a] + " " + buildversion[a] + " " + architektur2[c],
+                TextAlign = ContentAlignment.BottomCenter
+            };
+            title.Font = new Font(title.Font.Name, 9.25F, FontStyle.Bold);
+            Label downloadLabel = new Label
+            {
+                AutoSize = false,
+                Location = new Point(5, 35),
+                Size = new Size(200, 25),
+                TextAlign = ContentAlignment.BottomLeft
+            };
+            Label percLabel = new Label
+            {
+                AutoSize = false,
+                Location = new Point(progressBox.Size.Width - 105, 35),
+                Size = new Size(100, 25),
+                TextAlign = ContentAlignment.BottomRight
+            };
+            ProgressBar progressBarneu = new ProgressBar
+            {
+                Location = new Point(5, 65),
+                Size = new Size(progressBox.Size.Width - 10, 7)
+            };
+            progressBox.Controls.Add(title);
+            progressBox.Controls.Add(downloadLabel);
+            progressBox.Controls.Add(percLabel);
+            progressBox.Controls.Add(progressBarneu);
+            Controls.Add(progressBox);
+            List<Task> list = new List<Task>();
+
             WebRequest request = WebRequest.Create("http://tools.google.com/service/update2");
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
-            byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.33.23\" shell_version=\"1.3.33.23\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" requestid=\"{11111111-1111-1111-1111-111111111111}\"><os platform=\"win\" version=\"6.1\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[i] + "}\" version=\"\" ap=\"" + arapVersion[d - 1] + "\" lang=\"\" brand=\"\" client=\"\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/></app></request>");
+            byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.33.23\" shell_version=\"1.3.33.23\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" requestid=\"{11111111-1111-1111-1111-111111111111}\"><os platform=\"win\" version=\"6.1\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[a] + "}\" version=\"\" ap=\"" + arapVersion[d - 1] + "\" lang=\"\" brand=\"\" client=\"\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/></app></request>");
             request.ContentLength = byteArray.Length;
             Stream dataStream = request.GetRequestStream();
             dataStream.Write(byteArray, 0, byteArray.Length);
@@ -272,11 +319,105 @@ namespace Chrome_Updater
                 sp.ConnectionLimit = 2;
                 using (webClient = new WebClient())
                 {
-                    webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
-                    webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
+                    webClient.DownloadProgressChanged += (o, args) =>
+                    {
+                        Control[] buttons = Controls.Find("button" + d, true);
+                        if (buttons.Length > 0)
+                        {
+                            Button button = (Button)buttons[0];
+                            button.BackColor = Color.Orange;
+                        }
+                        progressBarneu.Value = args.ProgressPercentage;
+                        downloadLabel.Text = string.Format("{0} MB's / {1} MB's",
+                            (args.BytesReceived / 1024d / 1024d).ToString("0.00"),
+                            (args.TotalBytesToReceive / 1024d / 1024d).ToString("0.00"));
+                        percLabel.Text = args.ProgressPercentage.ToString() + "%";
+                    };
+                    webClient.DownloadFileCompleted += (o, args) =>
+                    {
+                        if (args.Cancelled == true)
+                        {
+                            MessageBox.Show("Download has been canceled.");
+                        }
+                        else
+                        {
+                            downloadLabel.Text = culture1.Name != "de-DE" ? "Unpacking" : "Entpacken";
+                            string arguments = " x " + "Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe" + " -o" + @"Update\" + entpDir[b] + " -y";
+                            Process process = new Process();
+                            process.StartInfo.FileName = @"Bin\7zr.exe";
+                            process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                            process.StartInfo.Arguments = arguments;
+                            process.Start();
+                            process.WaitForExit();
+                            process.StartInfo.Arguments = " x " + @"Update\" + entpDir[b] + "\\Chrome.7z -o" + @"Update\" + entpDir[b] + " -y";
+                            process.Start();
+                            process.WaitForExit();
+                            if ((File.Exists(@"Update\" + entpDir[b] + "\\chrome-bin\\Chrome.exe")) && (File.Exists(instDir[b] + "\\updates\\Version.log")))
+                            {
+                                string[] instVersion = File.ReadAllText(instDir[b] + "\\updates\\Version.log").Split(new char[] { '|' });
+                                FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Update\\" + entpDir[b] + "\\chrome-bin\\Chrome.exe");
+                                if (checkBox1.Checked)
+                                {
+                                    if (testm.FileVersion != instVersion[0])
+                                    {
+                                        if (Directory.Exists(instDir[b] + "\\" + instVersion[0]))
+                                        {
+                                            Directory.Delete(instDir[b] + "\\" + instVersion[0], true);
+                                        }
+                                        Thread.Sleep(2000);
+                                        NewMethod4(b, c, testm, d);
+                                    }
+                                    else if ((testm.FileVersion == instVersion[0]) && (checkBox4.Checked))
+                                    {
+                                        if (Directory.Exists(instDir[b] + "\\" + instVersion[0]))
+                                        {
+                                            Directory.Delete(instDir[d] + "\\" + instVersion[0], true);
+                                        }
+                                        Thread.Sleep(2000);
+                                        NewMethod4(b, c, testm, d);
+                                    }
+                                }
+                                else if (!checkBox1.Checked)
+                                {
+                                    if (Directory.Exists(instDir[b] + "\\" + instVersion[0]))
+                                    {
+                                        Directory.Delete(instDir[b] + "\\" + instVersion[0], true);
+                                    }
+                                    Thread.Sleep(2000);
+                                    NewMethod4(b, c, testm, d);
+                                }
+                            }
+                            else
+                            {
+                                if (!Directory.Exists(instDir[b]))
+                                {
+                                    Directory.CreateDirectory(instDir[b]);
+                                }
+                                NewMethod4( b, c, FileVersionInfo.GetVersionInfo(applicationPath + "\\Update\\" + entpDir[b] + "\\chrome-bin\\Chrome.exe"), d);
+                            }
+                        }
+                        if (checkBox5.Checked)
+                        {
+                            if (!File.Exists(deskDir + "\\" + instDir[b] + ".lnk"))
+                            {
+                                NewMethod5(a, b);
+                            }
+                        }
+                        else if (File.Exists(deskDir + "\\" + instDir[b] + ".lnk") && (instDir[b] == "Chrome"))
+                        {
+                            NewMethod5(a, b);
+                        }
+                        if (!File.Exists(@instDir[b] + " Launcher.exe"))
+                        {
+                            File.Copy(@"Bin\Launcher\" + instDir[b] + " Launcher.exe", @instDir[b] + " Launcher.exe");
+                        }
+                        File.Delete("Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe");
+                        downloadLabel.Text = culture1.Name != "de-DE" ? "Unpacked" : "Entpackt";
+                    };
                     try
                     {
-                        webClient.DownloadFileAsync(uri, "Chrome_" + architektur[e] + "_" + buildversion[i] + "_" + ring[i] + ".exe", a + "|" + b + "|" + c + "|" + d + "|" + "Chrome_" + architektur[e] + "_" + buildversion[i] + "_" + ring[i] + ".exe" + "|" + architektur2[e] + "|" + i + "|" + f);
+                        var task = webClient.DownloadFileTaskAsync(uri, "Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe");
+                        list.Add(task);
                     }
                     catch (Exception ex)
                     {
@@ -284,130 +425,9 @@ namespace Chrome_Updater
                     }
                 }
             }
-        }
-        private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            string[] i = e.UserState.ToString().Split(new char[] { '|' });
-            Control[] progressBars = Controls.Find("progressBar" + i[0], true);
-            Control[] buttons = Controls.Find("button" + i[3], true);
-            Control[] label1 = Controls.Find("label" + i[1], true);
-            Control[] label2 = Controls.Find("label" + i[2], true);
-            if (buttons.Length > 0)
-            {
-                Button button = (Button)buttons[0];
-                button.BackColor = Color.Orange;
-            }
-            if (progressBars.Length > 0)
-            {
-                ProgressBar progressBar = (ProgressBar)progressBars[0];
-                progressBar.Visible = true;
-                progressBar.Value = e.ProgressPercentage;
-            }
-            if (label1.Length > 0)
-            {
-                Label label = (Label)label1[0];
-                label.Visible = true;
-                label.Text = string.Format("{0} MB's / {1} MB's",
-                (e.BytesReceived / 1024d / 1024d).ToString("0.00"),
-                (e.TotalBytesToReceive / 1024d / 1024d).ToString("0.00"));
-            }
-            if (label2.Length > 0)
-            {
-                Label label3 = (Label)label2[0];
-                label3.Visible = true;
-                label3.Text = e.ProgressPercentage.ToString() + "%";
-            }
-        }
-        private void Completed(object sender, AsyncCompletedEventArgs e)
-        {
-            string[] i = e.UserState.ToString().Split(new char[] { '|' });
-            int b = int.Parse(i[1]);
-            int d = int.Parse(i[7]);
-            Control[] labels = Controls.Find("label" + b, true);
-            Label label = (Label)labels[0];
-            if (e.Cancelled == true)
-            {
-                MessageBox.Show("Download has been canceled.");
-            }
-            else
-            {
-                if (labels.Length > 0)
-                {
-                    label.Text = culture1.Name != "de-DE" ? "Unpacking" : "Entpacken";
-                    string arguments = " x " + i[4] + " -o" + @"Update\" + entpDir[d] + " -y";
-                    Process process = new Process();
-                    process.StartInfo.FileName = @"Bin\7zr.exe";
-                    process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                    process.StartInfo.Arguments = arguments;
-                    process.Start();
-                    process.WaitForExit();
-                    process.StartInfo.Arguments = " x " + @"Update\" + entpDir[d] + "\\Chrome.7z -o" + @"Update\" + entpDir[d] + " -y";
-                    process.Start();
-                    process.WaitForExit();
-                    int a = int.Parse(i[3]);
-                    if ((File.Exists(@"Update\" + entpDir[d] + "\\chrome-bin\\Chrome.exe")) && (File.Exists(instDir[d] + "\\updates\\Version.log")))
-                    {
-                        string[] instVersion = File.ReadAllText(instDir[d] + "\\updates\\Version.log").Split(new char[] { '|' });
-                        FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Update\\" + entpDir[d] + "\\chrome-bin\\Chrome.exe");
-                        if (checkBox1.Checked)
-                        {
-                            if (testm.FileVersion != instVersion[0])
-                            {
-                                if (Directory.Exists(instDir[d] + "\\" + instVersion[0]))
-                                {
-                                    Directory.Delete(instDir[d] + "\\" + instVersion[0], true);
-                                }
-                                Thread.Sleep(2000);
-                                NewMethod4(i, a, testm, d);
-                            }
-                            else if ((testm.FileVersion == instVersion[0]) && (checkBox4.Checked))
-                            {
-                                if (Directory.Exists(instDir[d] + "\\" + instVersion[0]))
-                                {
-                                    Directory.Delete(instDir[d] + "\\" + instVersion[0], true);
-                                }
-                                Thread.Sleep(2000);
-                                NewMethod4(i, a, testm, d);
-                            }
-                        }
-                        else if (!checkBox1.Checked)
-                        {
-                            if (Directory.Exists(instDir[d] + "\\" + instVersion[0]))
-                            {
-                                Directory.Delete(instDir[d] + "\\" + instVersion[0], true);
-                            }
-                            Thread.Sleep(2000);
-                            NewMethod4(i, a, testm, d);
-                        }
-                    }
-                    else
-                    {
-                        if (!Directory.Exists(instDir[d]))
-                        {
-                            Directory.CreateDirectory(instDir[d]);
-                        }
-                        NewMethod4(i, a, FileVersionInfo.GetVersionInfo(applicationPath + "\\Update\\" + entpDir[d] + "\\chrome-bin\\Chrome.exe"), d);
-                    }
-                }
-            }
-            int c = int.Parse(i[6]);
-            if (checkBox5.Checked)
-            {
-                if (!File.Exists(deskDir + "\\" + instDir[d] + ".lnk"))
-                {
-                    NewMethod5(c, d);
-                }
-            }
-            else if (File.Exists(deskDir + "\\" + instDir[d] + ".lnk") && (instDir[d] == "Chrome"))
-            {
-                NewMethod5(c, d);
-            }
-            if (!File.Exists(@instDir[d] + " Launcher.exe"))
-            {
-                File.Copy(@"Bin\Launcher\" + instDir[d] + " Launcher.exe", @instDir[d] + " Launcher.exe");
-            }
-            File.Delete(i[4]);
-            label.Text = culture1.Name != "de-DE" ? "Unpacked" : "Entpackt";
+            await Task.WhenAll(list);
+            await Task.Delay(2000);
+            Controls.Remove(progressBox);
         }
         public void CheckButton()
         {
@@ -594,7 +614,7 @@ namespace Chrome_Updater
                 button9.BackColor = Color.FromArgb(244, 244, 244);
             }
         }
-        private void NewMethod(int a, int b, int c, int d, int e, int f, int g)
+        private async Task NewMethod(int a, int b, int c, int d)
         {
             if (File.Exists(@instDir[b] + "\\updates\\Version.log"))
             {
@@ -602,7 +622,7 @@ namespace Chrome_Updater
                 {
                     if (checkBox4.Checked)
                     {
-                        DownloadFile(a, b, c, d, e, f, g);
+                        await DownloadFile(a, b, c, d);
                     }
                     else
                     {
@@ -611,15 +631,15 @@ namespace Chrome_Updater
                 }
                 else
                 {
-                    DownloadFile(a, b, c, d, e, f, g);
+                    await DownloadFile(a, b, c, d);
                 }
             }
             else
             {
-                DownloadFile(a, b, c, d, e, f, g);
+                await DownloadFile(a, b, c, d);
             }
         }
-        private void NewMethod1(int a, int b, int c)
+        private async Task NewMethod1(int a, int b, int c)
         {
             if (File.Exists(@"Chrome\updates\Version.log"))
             {
@@ -628,7 +648,7 @@ namespace Chrome_Updater
                 {
                     if (checkBox4.Checked)
                     {
-                        DownloadFile(a, 8, b, 5, 18, 17, c);
+                        await DownloadFile(a, 8, b, c);
                     }
                     else
                     {
@@ -637,15 +657,15 @@ namespace Chrome_Updater
                 }
                 else
                 {
-                    DownloadFile(a, 8, b, 5, 18, 17, c);
+                    await DownloadFile(a, 8, b, c);
                 }
             }
             else
             {
-                DownloadFile(a, 8, b, 5, 18, 17, c);
+                await DownloadFile(a, 8, b, c);
             }
         }
-        private void NewMethod2(int a, int b, int c, int d, int e, int f, int g)
+        private async Task NewMethod2(int a, int b, int c, int d)
         {
             if (Directory.Exists(instDir[b]))
             {
@@ -653,7 +673,7 @@ namespace Chrome_Updater
                 {
                     if (File.ReadAllText(instDir[b] + "\\updates\\Version.log").Split(new char[] { '|' })[0] != buildversion[a])
                     {
-                        DownloadFile(a, b, c, d, e, f, g);
+                        await DownloadFile(a, b, c, d);
                     }
                 }
             }
@@ -670,7 +690,7 @@ namespace Chrome_Updater
                 }
             }
         }
-        private void NewMethod4(string[] i2, int a, FileVersionInfo testm, int b)
+        private void NewMethod4(int b, int c, FileVersionInfo testm, int d)
         {
             Directory.Move(@"Update\" + entpDir[b] + "\\chrome-bin" + "\\" + testm.FileVersion, instDir[b] + "\\" + testm.FileVersion);
             File.Copy(@"Update\" + entpDir[b] + "\\Chrome-bin\\Chrome.exe", instDir[b] + "\\Chrome.exe", true);
@@ -679,7 +699,7 @@ namespace Chrome_Updater
             {
                 Directory.CreateDirectory(instDir[b] + "\\updates");
             }
-            File.WriteAllText(instDir[b] + "\\updates\\Version.log", testm.FileVersion + "|" + ring2[(a - 1)] + "|" + i2[5]);
+            File.WriteAllText(instDir[b] + "\\updates\\Version.log", testm.FileVersion + "|" + ring2[d - 1] + "|" + architektur2[c]);
             Directory.Delete(@"Update\" + entpDir[b], true);
             if (checkBox1.Checked)
             {
@@ -690,13 +710,13 @@ namespace Chrome_Updater
                 CheckButton2();
             }
         }
-        private void NewMethod5(int c, int d)
+        private void NewMethod5(int a, int b)
         {
             IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
-            IWshRuntimeLibrary.IWshShortcut link = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(deskDir + "\\" + instDir[d] + ".lnk");
-            link.IconLocation = applicationPath + "\\" + instDir[d] + "\\Chrome.exe" + "," + icon[c];
+            IWshRuntimeLibrary.IWshShortcut link = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(deskDir + "\\" + instDir[b] + ".lnk");
+            link.IconLocation = applicationPath + "\\" + instDir[b] + "\\Chrome.exe" + "," + icon[a];
             link.WorkingDirectory = applicationPath;
-            link.TargetPath = applicationPath + "\\" + instDir[d] + " Launcher.exe";
+            link.TargetPath = applicationPath + "\\" + instDir[b] + " Launcher.exe";
             link.Save();
         }
         private void NewMethod6(string[] instVersion, int a, int b, int c)
@@ -766,11 +786,135 @@ namespace Chrome_Updater
             if ((instVersion[1] == ring2[a]) && (instVersion[2] == arch))
             {
                 toolTip.SetToolTip(button, instVersion[0]);
+                toolTip.IsBalloon = true;
             }
             else
             {
                 toolTip.SetToolTip(button, String.Empty);
             }
         }
-    }
+        private void CheckUpdate()
+        {
+            GroupBox groupBoxupdate = new GroupBox
+            {
+                Location = new Point(groupBox3.Location.X, button10.Location.Y + button10.Size.Height + 5),
+                Size = new Size(groupBox3.Width, 90),
+                BackColor = Color.Aqua
+            };
+            Label versionLabel = new Label
+            {
+                AutoSize = false,
+                TextAlign = ContentAlignment.BottomCenter,
+                Dock = DockStyle.None,
+                Location = new Point(2, 30),
+                Size = new Size(groupBoxupdate.Width - 4, 25),
+            };
+            versionLabel.Font = new Font(versionLabel.Font.Name, 10F, FontStyle.Bold);
+            Label infoLabel = new Label
+            {
+                AutoSize = false,
+                TextAlign = ContentAlignment.BottomCenter,
+                Dock = DockStyle.None,
+                Location = new Point(2, 10),
+                Size = new Size(groupBoxupdate.Width - 4, 20),
+                Text = "Eine neue Version ist verfügbar"
+            };
+            infoLabel.Font = new Font(infoLabel.Font.Name, 8.75F);
+            Label downLabel = new Label
+            {
+                TextAlign = ContentAlignment.MiddleRight,
+                AutoSize = false,
+                Size = new Size(100, 23),
+                Text = "Jetzt Updaten"
+            };
+            Button laterButton = new Button
+            {
+                Text = "Nein",
+                Size = new Size(40, 23),
+                BackColor = Color.FromArgb(224, 224, 224)
+            };
+            Button updateButton = new Button
+            {
+                Location = new Point(groupBoxupdate.Width - Width - 10, 60),
+                Text = "Ja",
+                Size = new Size(40, 23),
+                BackColor = Color.FromArgb(224, 224, 224)
+            };
+            updateButton.Location = new Point(groupBoxupdate.Width - updateButton.Width - 10, 60);
+            laterButton.Location = new Point(updateButton.Location.X - laterButton.Width - 5, 60);
+            downLabel.Location = new Point(laterButton.Location.X - downLabel.Width - 20, 60);
+            groupBoxupdate.Controls.Add(updateButton);
+            groupBoxupdate.Controls.Add(laterButton);
+            groupBoxupdate.Controls.Add(downLabel);
+            groupBoxupdate.Controls.Add(infoLabel);
+            groupBoxupdate.Controls.Add(versionLabel);
+            updateButton.Click += new EventHandler(UpdateButton_Click);
+            laterButton.Click += new EventHandler(LaterButton_Click);
+            if (culture1.Name != "de-DE")
+            {
+                infoLabel.Text = "A new version is available";
+                laterButton.Text = "No";
+                updateButton.Text = "Yes";
+                downLabel.Text = "Update now";
+            }
+            void LaterButton_Click(object sender, EventArgs e)
+            {
+                groupBoxupdate.Dispose();
+                Controls.Remove(groupBoxupdate);
+                groupBox3.Enabled = true;
+            }
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                var request = (WebRequest)HttpWebRequest.Create("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Version.txt");
+                var response = request.GetResponse();
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                {
+                    var version = reader.ReadToEnd();
+                    versionLabel.Text = version;
+                    FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Portable Chrome Updater.exe");
+                    if (Convert.ToDecimal(version) > Convert.ToDecimal(testm.FileVersion))
+                    {
+                        Controls.Add(groupBoxupdate);
+                        groupBox3.Enabled = false;
+                    }
+                    reader.Close();
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            void UpdateButton_Click(object sender, EventArgs e)
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                var request2 = (WebRequest)HttpWebRequest.Create("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Version.txt");
+                var response2 = request2.GetResponse();
+                using (StreamReader reader = new StreamReader(response2.GetResponseStream()))
+                {
+                    var version = reader.ReadToEnd();
+                    reader.Close();
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                    using (WebClient myWebClient2 = new WebClient())
+                    {
+                        myWebClient2.DownloadFile($"https://github.com/UndertakerBen/PorChromeUpd/releases/download/v{version}/Portable.Chrome.Updater.v{version}.7z", @"Portable.Chrome.Updater.v" + version + ".7z");
+                    }
+                    File.AppendAllText(@"Update.cmd", "@echo off" + "\n" +
+                        "timeout /t 1 /nobreak" + "\n" +
+                        "\"" + applicationPath + "\\Bin\\7zr.exe\" e \"" + applicationPath + "\\Portable.Chrome.Updater.v" + version + ".7z\" -o\"" + applicationPath + "\" \"Portable Chrome Updater.exe\"" + " -y\n" +
+                        "call cmd /c Start /b \"\" " + "\"" + applicationPath + "\\Portable Chrome Updater.exe\"\n" +
+                        "del /f /q \"" + applicationPath + "\\Portable.Chrome.Updater.v" + version + ".7z\"\n" +
+                        "del /f /q \"" + applicationPath + "\\Update.cmd\" && exit\n" +
+                        "exit\n");
+
+                    string arguments = " /c call Update.cmd";
+                    Process process = new Process();
+                    process.StartInfo.FileName = "cmd.exe";
+                    process.StartInfo.Arguments = arguments;
+                    process.Start();
+                    Close();
+                }
+            }
+        }
+        }
 }
