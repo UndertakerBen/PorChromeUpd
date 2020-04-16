@@ -126,6 +126,7 @@ namespace Chrome_Updater
                     }
                 }
             }
+            CheckUpdate();
         }
         private async void Button1_Click(object sender, EventArgs e)
         {
