@@ -28,7 +28,7 @@ namespace Chrome_Updater
         WebClient webClient;
         readonly string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
         readonly string applicationPath = Application.StartupPath;
-        readonly CultureInfo culture1 = CultureInfo.CurrentUICulture;
+        private readonly CultureInfo culture1 = CultureInfo.CurrentUICulture;
         readonly ToolTip toolTip = new ToolTip();
         public Form1()
         {
@@ -61,14 +61,32 @@ namespace Chrome_Updater
             button9.Enabled = false;
             checkBox2.Enabled = false;
             checkBox3.Enabled = false;
-            if (culture1.Name != "de-DE")
+            switch (culture1.TwoLetterISOLanguageName)
             {
-                button10.Text = "Quit";
-                button9.Text = "Install all";
-                label10.Text = "Install all x86 and or x64";
-                checkBox4.Text = "Ignore version check";
-                checkBox1.Text = "Create a Folder for each version";
-                checkBox5.Text = "Create a shortcut on the desktop";
+                case "ru":
+                    button10.Text = "Уволиться";
+                    button9.Text = "Установить все";
+                    label10.Text = "Установите все x86 и или x64";
+                    checkBox4.Text = "Игнорировать проверку версии";
+                    checkBox1.Text = "Создать папку для каждой версии";
+                    checkBox5.Text = "Создать ярлык на рабочем столе";
+                    break;
+                case "de":
+                    button10.Text = "Beenden";
+                    button9.Text = "Alle Installieren";
+                    label10.Text = "Alle x86 und oder x64 installieren";
+                    checkBox4.Text = "Versionkontrolle ignorieren";
+                    checkBox1.Text = "Für jede Version einen eigenen Ordner";
+                    checkBox5.Text = "Eine Verknüpfung auf dem Desktop erstellen";
+                    break;
+                default:
+                    button10.Text = "Quit";
+                    button9.Text = "Install all";
+                    label10.Text = "Install all x86 and or x64";
+                    checkBox4.Text = "Ignore version check";
+                    checkBox1.Text = "Create a Folder for each version";
+                    checkBox5.Text = "Create a shortcut on the desktop";
+                    break;
             }
             if (IntPtr.Size != 8)
             {
@@ -127,6 +145,30 @@ namespace Chrome_Updater
                 }
             }
             CheckUpdate();
+            foreach (Process proc in Process.GetProcesses())
+            {
+                if (proc.ProcessName.Equals("Chrome"))
+                {
+                    switch (culture1.TwoLetterISOLanguageName)
+                    {
+                        case "ru":
+                            {
+                                MessageBox.Show("Пожалуйста, закройте работающий браузер Google Chrome перед обновлением браузера.", "Portable Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                return;
+                            }
+                        case "de":
+                            {
+                                MessageBox.Show("Bitte schließen Sie den laufenden Google Chrome-Browser, bevor Sie den Browser aktualisieren.", "Portable Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                return;
+                            }
+                        default:
+                            {
+                                MessageBox.Show("Please close the running Google Chrome browser before updating the browser.", "Portable Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                return;
+                            }
+                    }
+                }
+            }
         }
         private async void Button1_Click(object sender, EventArgs e)
         {
@@ -342,7 +384,18 @@ namespace Chrome_Updater
                         }
                         else
                         {
-                            downloadLabel.Text = culture1.Name != "de-DE" ? "Unpacking" : "Entpacken";
+                            switch (culture1.TwoLetterISOLanguageName)
+                            {
+                                case "ru":
+                                    downloadLabel.Text = "Распаковка";
+                                    break;
+                                case "de":
+                                    downloadLabel.Text = "Entpacken";
+                                    break;
+                                default:
+                                    downloadLabel.Text = "Unpacking";
+                                    break;
+                            }
                             string arguments = " x " + "Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe" + " -o" + @"Update\" + entpDir[b] + " -y";
                             Process process = new Process();
                             process.StartInfo.FileName = @"Bin\7zr.exe";
@@ -413,6 +466,18 @@ namespace Chrome_Updater
                             File.Copy(@"Bin\Launcher\" + instDir[b] + " Launcher.exe", @instDir[b] + " Launcher.exe");
                         }
                         File.Delete("Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe");
+                        switch (culture1.TwoLetterISOLanguageName)
+                        {
+                            case "ru":
+                                downloadLabel.Text = "Распакованный";
+                                break;
+                            case "de":
+                                downloadLabel.Text = "Entpackt";
+                                break;
+                            default:
+                                downloadLabel.Text = "Unpacked";
+                                break;
+                        }
                         downloadLabel.Text = culture1.Name != "de-DE" ? "Unpacked" : "Entpackt";
                     };
                     try
@@ -449,13 +514,17 @@ namespace Chrome_Updater
                     }
                     else if (buildversion[i] != instVersion[0])
                     {
-                        if (culture1.Name != "de-DE")
+                        switch (culture1.TwoLetterISOLanguageName)
                         {
-                            button9.Text = "Update all";
-                        }
-                        else
-                        {
-                            button9.Text = "Alle Updaten";
+                            case "ru":
+                                button9.Text = "Обновить все";
+                                break;
+                            case "de":
+                                button9.Text = "Alle Updaten";
+                                break;
+                            default:
+                                button9.Text = "Update all";
+                                break;
                         }
                         button9.Enabled = true;
                         button9.BackColor = Color.FromArgb(224, 224, 224);
@@ -560,15 +629,17 @@ namespace Chrome_Updater
         }
         public void Message1()
         {
-            if (culture1.Name != "de-DE")
+            switch (culture1.TwoLetterISOLanguageName)
             {
-                MessageBox.Show("The same version is already installed", "Portabel Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-            else
-            {
-                MessageBox.Show("Die selbe Version ist bereits installiert", "Portabel Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
+                case "ru":
+                    MessageBox.Show("Та же версия уже установлена", "Portabel Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                case "de":
+                    MessageBox.Show("Die selbe Version ist bereits installiert", "Portabel Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                default:
+                    MessageBox.Show("The same version is already installed", "Portabel Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
             }
         }
         private void CheckBox2_CheckedChanged(object sender, EventArgs e)
@@ -818,7 +889,6 @@ namespace Chrome_Updater
                 Dock = DockStyle.None,
                 Location = new Point(2, 10),
                 Size = new Size(groupBoxupdate.Width - 4, 20),
-                Text = "Eine neue Version ist verfügbar"
             };
             infoLabel.Font = new Font(infoLabel.Font.Name, 8.75F);
             Label downLabel = new Label
@@ -826,18 +896,15 @@ namespace Chrome_Updater
                 TextAlign = ContentAlignment.MiddleRight,
                 AutoSize = false,
                 Size = new Size(100, 23),
-                Text = "Jetzt Updaten"
             };
             Button laterButton = new Button
             {
-                Text = "Nein",
                 Size = new Size(40, 23),
                 BackColor = Color.FromArgb(224, 224, 224)
             };
             Button updateButton = new Button
             {
                 Location = new Point(groupBoxupdate.Width - Width - 10, 60),
-                Text = "Ja",
                 Size = new Size(40, 23),
                 BackColor = Color.FromArgb(224, 224, 224)
             };
@@ -851,12 +918,26 @@ namespace Chrome_Updater
             groupBoxupdate.Controls.Add(versionLabel);
             updateButton.Click += new EventHandler(UpdateButton_Click);
             laterButton.Click += new EventHandler(LaterButton_Click);
-            if (culture1.Name != "de-DE")
+            switch (culture1.TwoLetterISOLanguageName)
             {
-                infoLabel.Text = "A new version is available";
-                laterButton.Text = "No";
-                updateButton.Text = "Yes";
-                downLabel.Text = "Update now";
+                case "ru":
+                    infoLabel.Text = "Доступна новая версия";
+                    laterButton.Text = "нет";
+                    updateButton.Text = "Да";
+                    downLabel.Text = "Обновить сейчас";
+                    break;
+                case "de":
+                    infoLabel.Text = "Eine neue Version ist verfügbar";
+                    laterButton.Text = "Nein";
+                    updateButton.Text = "Ja";
+                    downLabel.Text = "Jetzt Updaten";
+                    break;
+                default:
+                    infoLabel.Text = "A new version is available";
+                    laterButton.Text = "No";
+                    updateButton.Text = "Yes";
+                    downLabel.Text = "Update now";
+                    break;
             }
             void LaterButton_Click(object sender, EventArgs e)
             {
@@ -916,6 +997,57 @@ namespace Chrome_Updater
                     Close();
                 }
             }
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            try
+            {
+                var request = (WebRequest)HttpWebRequest.Create("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Launcher/Version.txt");
+                var response = request.GetResponse();
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                {
+                    var version = reader.ReadToEnd();
+                    versionLabel.Text = version;
+                    FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Bin\\Launcher\\Chrome Launcher.exe");
+                    if (Convert.ToDecimal(version) > Convert.ToDecimal(testm.FileVersion))
+                    {
+                        reader.Close();
+                        try
+                        {
+                            using (WebClient myWebClient2 = new WebClient())
+                            {
+                                myWebClient2.DownloadFile("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Launcher/Launcher.7z", @"Launcher.7z");
+                            }
+                            string arguments = " x " + @"Launcher.7z" + " -o" + @"Bin\\Launcher" + " -y";
+                            Process process = new Process();
+                            process.StartInfo.FileName = @"Bin\7zr.exe";
+                            process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                            process.StartInfo.Arguments = arguments;
+                            process.Start();
+                            process.WaitForExit();
+                            File.Delete(@"Launcher.7z");
+                            foreach (string launcher in instDir)
+                            {
+                                if (File.Exists(launcher + " Launcher.exe"))
+                                {
+                                    FileVersionInfo binLauncher = FileVersionInfo.GetVersionInfo(applicationPath + "\\Bin\\Launcher\\" + launcher + " Launcher.exe");
+                                    FileVersionInfo istLauncher = FileVersionInfo.GetVersionInfo(applicationPath + "\\" + launcher + " Launcher.exe");
+                                    if (Convert.ToDecimal(binLauncher.FileVersion) > Convert.ToDecimal(istLauncher.FileVersion))
+                                    {
+                                        File.Copy(@"bin\\Launcher\\" + launcher + " Launcher.exe", launcher + " Launcher.exe", true);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
         }
-        }
+     }
 }
