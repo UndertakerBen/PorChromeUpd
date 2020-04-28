@@ -51,7 +51,7 @@ namespace Chrome_Launcher
             }
             else if (culture1.TwoLetterISOLanguageName == "ru")
             {
-                _ = MessageBox.Show("Хром не установлен", "Chrome Launcher", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                _ = MessageBox.Show("Google Chrome Portable не найден", "Chrome Launcher", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             else
             {

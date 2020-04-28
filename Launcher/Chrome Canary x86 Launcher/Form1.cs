@@ -18,9 +18,9 @@ namespace Chrome_Canary_x86_Launcher
                     radioButton1.Text = "Ein Profil für alle Versionen verwenden";
                     break;
                 case "ru":
-                    radioButton3.Text = "Используйте стандартный профиль Google Chrome";
-                    radioButton2.Text = "Используйте отдельный профиль для каждой версии";
-                    radioButton1.Text = "Используйте один профиль для всех версий";
+                    radioButton3.Text = "Использовать стандартное месторасположение профиля (readme)";
+                    radioButton2.Text = "Использовать разные папки для профилей разных версий";
+                    radioButton1.Text = "Использовать один профиль для всех версий";
                     break;
                 default:
                     radioButton3.Text = "Use the standard profile of Google Chrome";

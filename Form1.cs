@@ -64,11 +64,11 @@ namespace Chrome_Updater
             switch (culture1.TwoLetterISOLanguageName)
             {
                 case "ru":
-                    button10.Text = "Уволиться";
+                    button10.Text = "Выход";
                     button9.Text = "Установить все";
-                    label10.Text = "Установите все x86 и или x64";
+                    label10.Text = "Установить все версии x86 и/или x64";
                     checkBox4.Text = "Игнорировать проверку версии";
-                    checkBox1.Text = "Создать папку для каждой версии";
+                    checkBox1.Text = "Разные версии в отдельных папках";
                     checkBox5.Text = "Создать ярлык на рабочем столе";
                     break;
                 case "de":
@@ -153,7 +153,7 @@ namespace Chrome_Updater
                     {
                         case "ru":
                             {
-                                MessageBox.Show("Пожалуйста, закройте работающий браузер Google Chrome перед обновлением браузера.", "Portable Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                MessageBox.Show("Необходимо закрыть Google Chrome перед обновлением.", "Portable Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                                 return;
                             }
                         case "de":
@@ -632,7 +632,7 @@ namespace Chrome_Updater
             switch (culture1.TwoLetterISOLanguageName)
             {
                 case "ru":
-                    MessageBox.Show("Та же версия уже установлена", "Portabel Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Данная версия уже установлена", "Portabel Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 case "de":
                     MessageBox.Show("Die selbe Version ist bereits installiert", "Portabel Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -924,7 +924,7 @@ namespace Chrome_Updater
                     infoLabel.Text = "Доступна новая версия";
                     laterButton.Text = "нет";
                     updateButton.Text = "Да";
-                    downLabel.Text = "Обновить сейчас";
+                    downLabel.Text = "ОБНОВИТЬ";
                     break;
                 case "de":
                     infoLabel.Text = "Eine neue Version ist verfügbar";
