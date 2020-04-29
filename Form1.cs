@@ -169,6 +169,7 @@ namespace Chrome_Updater
                     }
                 }
             }
+            CheckLauncher();
         }
         private async void Button1_Click(object sender, EventArgs e)
         {
@@ -952,10 +953,10 @@ namespace Chrome_Updater
                 var response = request.GetResponse();
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
-                    var version = reader.ReadToEnd();
-                    versionLabel.Text = version;
+                   var version = reader.ReadToEnd();
                     FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Portable Chrome Updater.exe");
-                    if (Convert.ToDecimal(version) > Convert.ToDecimal(testm.FileVersion))
+                    versionLabel.Text = testm.FileVersion + "  >>> " + version;
+                    if (version != testm.FileVersion)
                     {
                         Controls.Add(groupBoxupdate);
                         groupBox3.Enabled = false;
@@ -965,7 +966,7 @@ namespace Chrome_Updater
             }
             catch (Exception)
             {
-
+                
             }
             void UpdateButton_Click(object sender, EventArgs e)
             {
@@ -997,6 +998,9 @@ namespace Chrome_Updater
                     Close();
                 }
             }
+        }
+        private void CheckLauncher()
+        {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             try
             {
@@ -1005,9 +1009,8 @@ namespace Chrome_Updater
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
                     var version = reader.ReadToEnd();
-                    versionLabel.Text = version;
                     FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Bin\\Launcher\\Chrome Launcher.exe");
-                    if (Convert.ToDecimal(version) > Convert.ToDecimal(testm.FileVersion))
+                    if (version != testm.FileVersion)
                     {
                         reader.Close();
                         try
@@ -1049,5 +1052,5 @@ namespace Chrome_Updater
 
             }
         }
-     }
+    }
 }
