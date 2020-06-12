@@ -6,6 +6,7 @@ namespace Chrome_Beta_x86_Launcher
 {
     public partial class Form1 : Form 
     {
+        private readonly string applicationPath = Application.StartupPath;
         public Form1()
         {
             CultureInfo culture = CultureInfo.CurrentUICulture;
@@ -33,17 +34,17 @@ namespace Chrome_Beta_x86_Launcher
         {
             if (radioButton1.Checked)
             {
-                System.IO.File.WriteAllText(@"Chrome Beta x86\Profile.txt", "--user-data-dir=\"profile\"");
+                System.IO.File.WriteAllText(applicationPath + "\\Chrome Beta x86\\Profile.txt", "--user-data-dir=\"profile\"");
                 this.Close();
             }
             if (radioButton2.Checked)
             {
-                System.IO.File.WriteAllText(@"Chrome Beta x86\Profile.txt", "--user-data-dir=\"Chrome Beta x86\\profile\"");
+                System.IO.File.WriteAllText(applicationPath + "\\Chrome Beta x86\\Profile.txt", "--user-data-dir=\"Chrome Beta x86\\profile\"");
                 this.Close();
             }
             if (radioButton3.Checked)
             {
-                System.IO.File.WriteAllText(@"Chrome Beta x86\Profile.txt", "");
+                System.IO.File.WriteAllText(applicationPath + "\\Chrome Beta x86\\Profile.txt", "");
                 this.Close();
             }
         }

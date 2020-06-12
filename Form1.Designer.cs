@@ -55,8 +55,39 @@
             this.button10 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.extrasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chromeAlsStandardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.registrierenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.entfernenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chromeStableX86AlsStandardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.registrierenToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.entfernenToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.chromeStableX64AlsStandardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.registrierenToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.entfernenToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.chromeBetax86AlsStandardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.registrierenToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.entfernenToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.chromeBetaX64AlsStandardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.registrierenToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.entfernenToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.chromeDeveloperX86AlsStandardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.registrierenToolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.entfernenToolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.chromeDeveloperX64AlsStandardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.registrierenToolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.entfernenToolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.chromeCanaryX86AlsStandardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.registrierenToolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
+            this.entfernenToolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
+            this.chromeCanaryX64AlsStandardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.registrierenToolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
+            this.entfernenToolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
+            this.versinsInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -238,7 +269,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(161, 13);
             this.label10.TabIndex = 18;
-            this.label10.Text = "Alle x86 und oder x64 installieren";
+            this.label10.Text = Langfile.Texts("Label10");
             // 
             // checkBox2
             // 
@@ -264,11 +295,11 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(253, 241);
+            this.button9.Location = new System.Drawing.Point(249, 261);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(106, 25);
             this.button9.TabIndex = 22;
-            this.button9.Text = "Alle Installieren";
+            this.button9.Text = Langfile.Texts("Button9");
             this.button9.UseVisualStyleBackColor = true;
             this.button9.EnabledChanged += new System.EventHandler(this.Button9_EnabledChanged);
             this.button9.Click += new System.EventHandler(this.Button9_Click);
@@ -287,31 +318,31 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(23, 246);
+            this.checkBox1.Location = new System.Drawing.Point(17, 261);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(207, 17);
             this.checkBox1.TabIndex = 49;
-            this.checkBox1.Text = "Für jede Version einen eigenen Ordner";
+            this.checkBox1.Text = Langfile.Texts("checkBox1");
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
             // 
             // checkBox4
             // 
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(23, 269);
+            this.checkBox4.Location = new System.Drawing.Point(17, 284);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(150, 17);
             this.checkBox4.TabIndex = 51;
-            this.checkBox4.Text = "Versionkontrolle ignorieren";
+            this.checkBox4.Text = Langfile.Texts("checkBox4");
             this.checkBox4.UseVisualStyleBackColor = true;
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(284, 276);
+            this.button10.Location = new System.Drawing.Point(280, 296);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(75, 25);
             this.button10.TabIndex = 52;
-            this.button10.Text = "Beenden";
+            this.button10.Text = Langfile.Texts("Button10");
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.Button10_Click);
             // 
@@ -336,7 +367,7 @@
             this.groupBox3.Controls.Add(this.button5);
             this.groupBox3.Controls.Add(this.button3);
             this.groupBox3.Controls.Add(this.button4);
-            this.groupBox3.Location = new System.Drawing.Point(12, 12);
+            this.groupBox3.Location = new System.Drawing.Point(8, 32);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(357, 212);
             this.groupBox3.TabIndex = 53;
@@ -349,8 +380,264 @@
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(237, 17);
             this.checkBox5.TabIndex = 49;
-            this.checkBox5.Text = "Eine Verknüpfung auf dem Desktop erstellen";
+            this.checkBox5.Text = Langfile.Texts("checkBox5");
             this.checkBox5.UseVisualStyleBackColor = true;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.BackColor = System.Drawing.Color.Silver;
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.extrasToolStripMenuItem,
+            this.versinsInfoToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(5, 5);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(365, 24);
+            this.menuStrip1.TabIndex = 54;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // extrasToolStripMenuItem
+            // 
+            this.extrasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.chromeAlsStandardToolStripMenuItem,
+            this.chromeStableX86AlsStandardToolStripMenuItem,
+            this.chromeStableX64AlsStandardToolStripMenuItem,
+            this.chromeBetax86AlsStandardToolStripMenuItem,
+            this.chromeBetaX64AlsStandardToolStripMenuItem,
+            this.chromeDeveloperX86AlsStandardToolStripMenuItem,
+            this.chromeDeveloperX64AlsStandardToolStripMenuItem,
+            this.chromeCanaryX86AlsStandardToolStripMenuItem,
+            this.chromeCanaryX64AlsStandardToolStripMenuItem});
+            this.extrasToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.extrasToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.extrasToolStripMenuItem.Name = "extrasToolStripMenuItem";
+            this.extrasToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.extrasToolStripMenuItem.Text = Langfile.Texts("Extra");
+            this.extrasToolStripMenuItem.Click += new System.EventHandler(this.ExtrasToolStripMenuItem_Click);
+            // 
+            // chromeAlsStandardToolStripMenuItem
+            // 
+            this.chromeAlsStandardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.registrierenToolStripMenuItem,
+            this.entfernenToolStripMenuItem});
+            this.chromeAlsStandardToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chromeAlsStandardToolStripMenuItem.Name = "chromeAlsStandardToolStripMenuItem";
+            this.chromeAlsStandardToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.chromeAlsStandardToolStripMenuItem.Text = "Chrome" + Langfile.Texts("Standard");
+            // 
+            // registrierenToolStripMenuItem
+            // 
+            this.registrierenToolStripMenuItem.Name = "registrierenToolStripMenuItem";
+            this.registrierenToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.registrierenToolStripMenuItem.Text = Langfile.Texts("Register");
+            this.registrierenToolStripMenuItem.Click += new System.EventHandler(this.RegistrierenToolStripMenuItem_Click);
+            // 
+            // entfernenToolStripMenuItem
+            // 
+            this.entfernenToolStripMenuItem.Name = "entfernenToolStripMenuItem";
+            this.entfernenToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.entfernenToolStripMenuItem.Text = "Entfernen";
+            this.entfernenToolStripMenuItem.Click += new System.EventHandler(this.EntfernenToolStripMenuItem_Click);
+            // 
+            // chromeStableX86AlsStandardToolStripMenuItem
+            // 
+            this.chromeStableX86AlsStandardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.registrierenToolStripMenuItem1,
+            this.entfernenToolStripMenuItem1});
+            this.chromeStableX86AlsStandardToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chromeStableX86AlsStandardToolStripMenuItem.Name = "chromeStableX86AlsStandardToolStripMenuItem";
+            this.chromeStableX86AlsStandardToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.chromeStableX86AlsStandardToolStripMenuItem.Text = "Chrome Stable x86" + Langfile.Texts("Standard");
+            // 
+            // registrierenToolStripMenuItem1
+            // 
+            this.registrierenToolStripMenuItem1.Name = "registrierenToolStripMenuItem1";
+            this.registrierenToolStripMenuItem1.Size = new System.Drawing.Size(136, 22);
+            this.registrierenToolStripMenuItem1.Text = Langfile.Texts("Register");
+            this.registrierenToolStripMenuItem1.Click += new System.EventHandler(this.RegistrierenToolStripMenuItem1_Click);
+            // 
+            // entfernenToolStripMenuItem1
+            // 
+            this.entfernenToolStripMenuItem1.Name = "entfernenToolStripMenuItem1";
+            this.entfernenToolStripMenuItem1.Size = new System.Drawing.Size(136, 22);
+            this.entfernenToolStripMenuItem1.Text = "Entfernen";
+            this.entfernenToolStripMenuItem1.Click += new System.EventHandler(this.EntfernenToolStripMenuItem1_Click);
+            // 
+            // chromeStableX64AlsStandardToolStripMenuItem
+            // 
+            this.chromeStableX64AlsStandardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.registrierenToolStripMenuItem2,
+            this.entfernenToolStripMenuItem2});
+            this.chromeStableX64AlsStandardToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chromeStableX64AlsStandardToolStripMenuItem.Name = "chromeStableX64AlsStandardToolStripMenuItem";
+            this.chromeStableX64AlsStandardToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.chromeStableX64AlsStandardToolStripMenuItem.Text = "Chrome Stable x64" + Langfile.Texts("Standard");
+            // 
+            // registrierenToolStripMenuItem2
+            // 
+            this.registrierenToolStripMenuItem2.Name = "registrierenToolStripMenuItem2";
+            this.registrierenToolStripMenuItem2.Size = new System.Drawing.Size(136, 22);
+            this.registrierenToolStripMenuItem2.Text = Langfile.Texts("Register");
+            this.registrierenToolStripMenuItem2.Click += new System.EventHandler(this.RegistrierenToolStripMenuItem2_Click);
+            // 
+            // entfernenToolStripMenuItem2
+            // 
+            this.entfernenToolStripMenuItem2.Name = "entfernenToolStripMenuItem2";
+            this.entfernenToolStripMenuItem2.Size = new System.Drawing.Size(136, 22);
+            this.entfernenToolStripMenuItem2.Text = Langfile.Texts("Remove");
+            this.entfernenToolStripMenuItem2.Click += new System.EventHandler(this.EntfernenToolStripMenuItem2_Click);
+            // 
+            // chromeBetax86AlsStandardToolStripMenuItem
+            // 
+            this.chromeBetax86AlsStandardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.registrierenToolStripMenuItem3,
+            this.entfernenToolStripMenuItem3});
+            this.chromeBetax86AlsStandardToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chromeBetax86AlsStandardToolStripMenuItem.Name = "chromeBetax86AlsStandardToolStripMenuItem";
+            this.chromeBetax86AlsStandardToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.chromeBetax86AlsStandardToolStripMenuItem.Text = "Chrome Beta x86" + Langfile.Texts("Standard");
+            // 
+            // registrierenToolStripMenuItem3
+            // 
+            this.registrierenToolStripMenuItem3.Name = "registrierenToolStripMenuItem3";
+            this.registrierenToolStripMenuItem3.Size = new System.Drawing.Size(136, 22);
+            this.registrierenToolStripMenuItem3.Text = Langfile.Texts("Register");
+            this.registrierenToolStripMenuItem3.Click += new System.EventHandler(this.RegistrierenToolStripMenuItem3_Click);
+            // 
+            // entfernenToolStripMenuItem3
+            // 
+            this.entfernenToolStripMenuItem3.Name = "entfernenToolStripMenuItem3";
+            this.entfernenToolStripMenuItem3.Size = new System.Drawing.Size(136, 22);
+            this.entfernenToolStripMenuItem3.Text = Langfile.Texts("Remove");
+            this.entfernenToolStripMenuItem3.Click += new System.EventHandler(this.EntfernenToolStripMenuItem3_Click);
+            // 
+            // chromeBetaX64AlsStandardToolStripMenuItem
+            // 
+            this.chromeBetaX64AlsStandardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.registrierenToolStripMenuItem4,
+            this.entfernenToolStripMenuItem4});
+            this.chromeBetaX64AlsStandardToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chromeBetaX64AlsStandardToolStripMenuItem.Name = "chromeBetaX64AlsStandardToolStripMenuItem";
+            this.chromeBetaX64AlsStandardToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.chromeBetaX64AlsStandardToolStripMenuItem.Text = "Chrome Beta x64" + Langfile.Texts("Standard");
+            // 
+            // registrierenToolStripMenuItem4
+            // 
+            this.registrierenToolStripMenuItem4.Name = "registrierenToolStripMenuItem4";
+            this.registrierenToolStripMenuItem4.Size = new System.Drawing.Size(136, 22);
+            this.registrierenToolStripMenuItem4.Text = Langfile.Texts("Register");
+            this.registrierenToolStripMenuItem4.Click += new System.EventHandler(this.RegistrierenToolStripMenuItem4_Click);
+            // 
+            // entfernenToolStripMenuItem4
+            // 
+            this.entfernenToolStripMenuItem4.Name = "entfernenToolStripMenuItem4";
+            this.entfernenToolStripMenuItem4.Size = new System.Drawing.Size(136, 22);
+            this.entfernenToolStripMenuItem4.Text = Langfile.Texts("Remove");
+            this.entfernenToolStripMenuItem4.Click += new System.EventHandler(this.EntfernenToolStripMenuItem4_Click);
+            // 
+            // chromeDeveloperX86AlsStandardToolStripMenuItem
+            // 
+            this.chromeDeveloperX86AlsStandardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.registrierenToolStripMenuItem5,
+            this.entfernenToolStripMenuItem5});
+            this.chromeDeveloperX86AlsStandardToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chromeDeveloperX86AlsStandardToolStripMenuItem.Name = "chromeDeveloperX86AlsStandardToolStripMenuItem";
+            this.chromeDeveloperX86AlsStandardToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.chromeDeveloperX86AlsStandardToolStripMenuItem.Text = "Chrome Developer x86" + Langfile.Texts("Standard");
+            // 
+            // registrierenToolStripMenuItem5
+            // 
+            this.registrierenToolStripMenuItem5.Name = "registrierenToolStripMenuItem5";
+            this.registrierenToolStripMenuItem5.Size = new System.Drawing.Size(136, 22);
+            this.registrierenToolStripMenuItem5.Text = Langfile.Texts("Register");
+            this.registrierenToolStripMenuItem5.Click += new System.EventHandler(this.RegistrierenToolStripMenuItem5_Click);
+            // 
+            // entfernenToolStripMenuItem5
+            // 
+            this.entfernenToolStripMenuItem5.Name = "entfernenToolStripMenuItem5";
+            this.entfernenToolStripMenuItem5.Size = new System.Drawing.Size(136, 22);
+            this.entfernenToolStripMenuItem5.Text = Langfile.Texts("Remove");
+            this.entfernenToolStripMenuItem5.Click += new System.EventHandler(this.EntfernenToolStripMenuItem5_Click);
+            // 
+            // chromeDeveloperX64AlsStandardToolStripMenuItem
+            // 
+            this.chromeDeveloperX64AlsStandardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.registrierenToolStripMenuItem6,
+            this.entfernenToolStripMenuItem6});
+            this.chromeDeveloperX64AlsStandardToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chromeDeveloperX64AlsStandardToolStripMenuItem.Name = "chromeDeveloperX64AlsStandardToolStripMenuItem";
+            this.chromeDeveloperX64AlsStandardToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.chromeDeveloperX64AlsStandardToolStripMenuItem.Text = "Chrome Developer x64" + Langfile.Texts("Standard");
+            // 
+            // registrierenToolStripMenuItem6
+            // 
+            this.registrierenToolStripMenuItem6.Name = "registrierenToolStripMenuItem6";
+            this.registrierenToolStripMenuItem6.Size = new System.Drawing.Size(136, 22);
+            this.registrierenToolStripMenuItem6.Text = Langfile.Texts("Register");
+            this.registrierenToolStripMenuItem6.Click += new System.EventHandler(this.RegistrierenToolStripMenuItem6_Click);
+            // 
+            // entfernenToolStripMenuItem6
+            // 
+            this.entfernenToolStripMenuItem6.Name = "entfernenToolStripMenuItem6";
+            this.entfernenToolStripMenuItem6.Size = new System.Drawing.Size(136, 22);
+            this.entfernenToolStripMenuItem6.Text = Langfile.Texts("Remove");
+            this.entfernenToolStripMenuItem6.Click += new System.EventHandler(this.EntfernenToolStripMenuItem6_Click);
+            // 
+            // chromeCanaryX86AlsStandardToolStripMenuItem
+            // 
+            this.chromeCanaryX86AlsStandardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.registrierenToolStripMenuItem7,
+            this.entfernenToolStripMenuItem7});
+            this.chromeCanaryX86AlsStandardToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chromeCanaryX86AlsStandardToolStripMenuItem.Name = "chromeCanaryX86AlsStandardToolStripMenuItem";
+            this.chromeCanaryX86AlsStandardToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.chromeCanaryX86AlsStandardToolStripMenuItem.Text = "Chrome Canary x86" + Langfile.Texts("Standard");
+            // 
+            // registrierenToolStripMenuItem7
+            // 
+            this.registrierenToolStripMenuItem7.Name = "registrierenToolStripMenuItem7";
+            this.registrierenToolStripMenuItem7.Size = new System.Drawing.Size(136, 22);
+            this.registrierenToolStripMenuItem7.Text = Langfile.Texts("Register");
+            this.registrierenToolStripMenuItem7.Click += new System.EventHandler(this.RegistrierenToolStripMenuItem7_Click);
+            // 
+            // entfernenToolStripMenuItem7
+            // 
+            this.entfernenToolStripMenuItem7.Name = "entfernenToolStripMenuItem7";
+            this.entfernenToolStripMenuItem7.Size = new System.Drawing.Size(136, 22);
+            this.entfernenToolStripMenuItem7.Text = Langfile.Texts("Remove");
+            this.entfernenToolStripMenuItem7.Click += new System.EventHandler(this.EntfernenToolStripMenuItem7_Click);
+            // 
+            // chromeCanaryX64AlsStandardToolStripMenuItem
+            // 
+            this.chromeCanaryX64AlsStandardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.registrierenToolStripMenuItem8,
+            this.entfernenToolStripMenuItem8});
+            this.chromeCanaryX64AlsStandardToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.chromeCanaryX64AlsStandardToolStripMenuItem.Name = "chromeCanaryX64AlsStandardToolStripMenuItem";
+            this.chromeCanaryX64AlsStandardToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.chromeCanaryX64AlsStandardToolStripMenuItem.Text = "Chrome Canary x64" + Langfile.Texts("Standard");
+            // 
+            // registrierenToolStripMenuItem8
+            // 
+            this.registrierenToolStripMenuItem8.Name = "registrierenToolStripMenuItem8";
+            this.registrierenToolStripMenuItem8.Size = new System.Drawing.Size(136, 22);
+            this.registrierenToolStripMenuItem8.Text = Langfile.Texts("Register");
+            this.registrierenToolStripMenuItem8.Click += new System.EventHandler(this.RegistrierenToolStripMenuItem8_Click);
+            // 
+            // entfernenToolStripMenuItem8
+            // 
+            this.entfernenToolStripMenuItem8.Name = "entfernenToolStripMenuItem8";
+            this.entfernenToolStripMenuItem8.Size = new System.Drawing.Size(136, 22);
+            this.entfernenToolStripMenuItem8.Text = Langfile.Texts("Remove");
+            this.entfernenToolStripMenuItem8.Click += new System.EventHandler(this.EntfernenToolStripMenuItem8_Click);
+            // 
+            // versinsInfoToolStripMenuItem
+            // 
+            this.versinsInfoToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.versinsInfoToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.versinsInfoToolStripMenuItem.Name = "versinsInfoToolStripMenuItem";
+            this.versinsInfoToolStripMenuItem.Size = new System.Drawing.Size(84, 20);
+            this.versinsInfoToolStripMenuItem.Text = Langfile.Texts("VInfo");
+            this.versinsInfoToolStripMenuItem.Click += new System.EventHandler(this.VersinsInfoToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -359,13 +646,15 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.GhostWhite;
-            this.ClientSize = new System.Drawing.Size(383, 314);
+            this.ClientSize = new System.Drawing.Size(375, 340);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.checkBox4);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button9);
+            this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Padding = new System.Windows.Forms.Padding(5);
             this.Text = "Portable Chrome Updater";
@@ -374,6 +663,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -407,6 +698,36 @@
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem extrasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem chromeAlsStandardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem registrierenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem entfernenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem chromeStableX86AlsStandardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem registrierenToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem entfernenToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem chromeStableX64AlsStandardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem registrierenToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem entfernenToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem chromeBetax86AlsStandardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem registrierenToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem entfernenToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem chromeBetaX64AlsStandardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem registrierenToolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem entfernenToolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem chromeDeveloperX86AlsStandardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem registrierenToolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem entfernenToolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem chromeDeveloperX64AlsStandardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem registrierenToolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem entfernenToolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem chromeCanaryX86AlsStandardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem registrierenToolStripMenuItem7;
+        private System.Windows.Forms.ToolStripMenuItem entfernenToolStripMenuItem7;
+        private System.Windows.Forms.ToolStripMenuItem chromeCanaryX64AlsStandardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem registrierenToolStripMenuItem8;
+        private System.Windows.Forms.ToolStripMenuItem entfernenToolStripMenuItem8;
+        private System.Windows.Forms.ToolStripMenuItem versinsInfoToolStripMenuItem;
     }
 }
 

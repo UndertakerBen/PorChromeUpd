@@ -6,6 +6,7 @@ namespace Chrome_Launcher
 {
     public partial class Form1 : Form 
     {
+        private readonly string applicationPath = Application.StartupPath;
         public Form1()
         {
             CultureInfo culture = CultureInfo.CurrentUICulture;
@@ -33,17 +34,17 @@ namespace Chrome_Launcher
         {
             if (radioButton1.Checked)
             {
-                System.IO.File.WriteAllText(@"Chrome\Profile.txt", "--user-data-dir=\"profile\"");
+                System.IO.File.WriteAllText(applicationPath + "\\Chrome\\Profile.txt", "--user-data-dir=\"profile\"");
                 this.Close();
             }
             if (radioButton2.Checked)
             {
-                System.IO.File.WriteAllText(@"Chrome\Profile.txt", "--user-data-dir=\"Chrome\\profile\"");
+                System.IO.File.WriteAllText(applicationPath + "\\Chrome\\Profile.txt", "--user-data-dir=\"Chrome\\profile\"");
                 this.Close();
             }
             if (radioButton3.Checked)
             {
-                System.IO.File.WriteAllText(@"Chrome\Profile.txt", "");
+                System.IO.File.WriteAllText(applicationPath + "\\Chrome\\Profile.txt", "");
                 this.Close();
             }
         }

@@ -29,29 +29,37 @@ namespace Chrome_Updater
         readonly string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
         readonly string applicationPath = Application.StartupPath;
         private readonly CultureInfo culture1 = CultureInfo.CurrentUICulture;
-        readonly ToolTip toolTip = new ToolTip();
+        private readonly ToolTip toolTip = new ToolTip();
+        
         public Form1()
         {
             InitializeComponent();
-            for (int i = 0; i <= 3; i++)
+            try
             {
-                WebRequest request = WebRequest.Create("http://tools.google.com/service/update2");
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-                byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.33.23\" shell_version=\"1.3.33.23\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" requestid=\"{11111111-1111-1111-1111-111111111111}\"><os platform=\"win\" version=\"6.1\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[i] + "}\" version=\"\" ap=\"" + arapVersion[i] + "\" lang=\"\" brand=\"\" client=\"\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/></app></request>");
-                request.ContentLength = byteArray.Length;
-                Stream dataStream = request.GetRequestStream();
-                dataStream.Write(byteArray, 0, byteArray.Length);
-                dataStream.Close();
-                WebResponse response = request.GetResponse();
-                using (dataStream = response.GetResponseStream())
+                for (int i = 0; i <= 3; i++)
                 {
-                    StreamReader reader = new StreamReader(dataStream);
-                    string responseFromServer = reader.ReadToEnd();
-                    string[] URL = responseFromServer.Substring(responseFromServer.IndexOf("manifest version=")).Split(new char[] { '"' });
-                    buildversion[i] = URL[1];
-                    buildversion[i + 4] = URL[1];
+                    WebRequest request = WebRequest.Create("http://tools.google.com/service/update2");
+                    request.Method = "POST";
+                    request.ContentType = "application/x-www-form-urlencoded";
+                    byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.33.23\" shell_version=\"1.3.33.23\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" requestid=\"{11111111-1111-1111-1111-111111111111}\"><os platform=\"win\" version=\"6.1\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[i] + "}\" version=\"\" ap=\"" + arapVersion[i] + "\" lang=\"\" brand=\"\" client=\"\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/></app></request>");
+                    request.ContentLength = byteArray.Length;
+                    Stream dataStream = request.GetRequestStream();
+                    dataStream.Write(byteArray, 0, byteArray.Length);
+                    dataStream.Close();
+                    WebResponse response = request.GetResponse();
+                    using (dataStream = response.GetResponseStream())
+                    {
+                        StreamReader reader = new StreamReader(dataStream);
+                        string responseFromServer = reader.ReadToEnd();
+                        string[] URL = responseFromServer.Substring(responseFromServer.IndexOf("manifest version=")).Split(new char[] { '"' });
+                        buildversion[i] = URL[1];
+                        buildversion[i + 4] = URL[1];
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: \n\r" + ex.Message);
             }
             label2.Text = buildversion[0];
             label4.Text = buildversion[1];
@@ -61,33 +69,6 @@ namespace Chrome_Updater
             button9.Enabled = false;
             checkBox2.Enabled = false;
             checkBox3.Enabled = false;
-            switch (culture1.TwoLetterISOLanguageName)
-            {
-                case "ru":
-                    button10.Text = "Выход";
-                    button9.Text = "Установить все";
-                    label10.Text = "Установить все версии x86 и/или x64";
-                    checkBox4.Text = "Игнорировать проверку версии";
-                    checkBox1.Text = "Разные версии в отдельных папках";
-                    checkBox5.Text = "Создать ярлык на рабочем столе";
-                    break;
-                case "de":
-                    button10.Text = "Beenden";
-                    button9.Text = "Alle Installieren";
-                    label10.Text = "Alle x86 und oder x64 installieren";
-                    checkBox4.Text = "Versionkontrolle ignorieren";
-                    checkBox1.Text = "Für jede Version einen eigenen Ordner";
-                    checkBox5.Text = "Eine Verknüpfung auf dem Desktop erstellen";
-                    break;
-                default:
-                    button10.Text = "Quit";
-                    button9.Text = "Install all";
-                    label10.Text = "Install all x86 and or x64";
-                    checkBox4.Text = "Ignore version check";
-                    checkBox1.Text = "Create a Folder for each version";
-                    checkBox5.Text = "Create a shortcut on the desktop";
-                    break;
-            }
             if (IntPtr.Size != 8)
             {
                 button5.Visible = false;
@@ -149,24 +130,8 @@ namespace Chrome_Updater
             {
                 if (proc.ProcessName.Equals("Chrome"))
                 {
-                    switch (culture1.TwoLetterISOLanguageName)
-                    {
-                        case "ru":
-                            {
-                                MessageBox.Show("Необходимо закрыть Google Chrome перед обновлением.", "Portable Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                                return;
-                            }
-                        case "de":
-                            {
-                                MessageBox.Show("Bitte schließen Sie den laufenden Google Chrome-Browser, bevor Sie den Browser aktualisieren.", "Portable Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                                return;
-                            }
-                        default:
-                            {
-                                MessageBox.Show("Please close the running Google Chrome browser before updating the browser.", "Portable Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                                return;
-                            }
-                    }
+                    MessageBox.Show(Langfile.Texts("MeassageRunning"), "Portable Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
                 }
             }
             CheckLauncher();
@@ -341,79 +306,88 @@ namespace Chrome_Updater
             progressBox.Controls.Add(progressBarneu);
             Controls.Add(progressBox);
             List<Task> list = new List<Task>();
-
-            WebRequest request = WebRequest.Create("http://tools.google.com/service/update2");
-            request.Method = "POST";
-            request.ContentType = "application/x-www-form-urlencoded";
-            byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.33.23\" shell_version=\"1.3.33.23\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" requestid=\"{11111111-1111-1111-1111-111111111111}\"><os platform=\"win\" version=\"6.1\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[a] + "}\" version=\"\" ap=\"" + arapVersion[d - 1] + "\" lang=\"\" brand=\"\" client=\"\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/></app></request>");
-            request.ContentLength = byteArray.Length;
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
-            WebResponse response = request.GetResponse();
-            using (dataStream = response.GetResponseStream())
+            try
             {
-                StreamReader reader = new StreamReader(dataStream);
-                string responseFromServer = reader.ReadToEnd();
-                string[] tempURL2 = responseFromServer.Substring(responseFromServer.LastIndexOf("codebase=")).Split(new char[] { '"' });
-                string[] tempURL4 = responseFromServer.Substring(responseFromServer.IndexOf("run=")).Split(new char[] { '"' });
-                string[] tempURL6 = responseFromServer.Substring(responseFromServer.IndexOf("manifest version=")).Split(new char[] { '"' });
-                Uri uri = new Uri(tempURL2[1] + tempURL4[1]);
-                ServicePoint sp = ServicePointManager.FindServicePoint(uri);
-                sp.ConnectionLimit = 2;
-                using (webClient = new WebClient())
+                WebRequest request = WebRequest.Create("http://tools.google.com/service/update2");
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+                byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.33.23\" shell_version=\"1.3.33.23\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" requestid=\"{11111111-1111-1111-1111-111111111111}\"><os platform=\"win\" version=\"6.1\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[a] + "}\" version=\"\" ap=\"" + arapVersion[d - 1] + "\" lang=\"\" brand=\"\" client=\"\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/></app></request>");
+                request.ContentLength = byteArray.Length;
+                Stream dataStream = request.GetRequestStream();
+                dataStream.Write(byteArray, 0, byteArray.Length);
+                dataStream.Close();
+                WebResponse response = request.GetResponse();
+                using (dataStream = response.GetResponseStream())
                 {
-                    webClient.DownloadProgressChanged += (o, args) =>
+                    StreamReader reader = new StreamReader(dataStream);
+                    string responseFromServer = reader.ReadToEnd();
+                    string[] tempURL2 = responseFromServer.Substring(responseFromServer.LastIndexOf("codebase=")).Split(new char[] { '"' });
+                    string[] tempURL4 = responseFromServer.Substring(responseFromServer.IndexOf("run=")).Split(new char[] { '"' });
+                    string[] tempURL6 = responseFromServer.Substring(responseFromServer.IndexOf("manifest version=")).Split(new char[] { '"' });
+                    Uri uri = new Uri(tempURL2[1] + tempURL4[1]);
+                    ServicePoint sp = ServicePointManager.FindServicePoint(uri);
+                    sp.ConnectionLimit = 2;
+                    using (webClient = new WebClient())
                     {
-                        Control[] buttons = Controls.Find("button" + d, true);
-                        if (buttons.Length > 0)
+                        webClient.DownloadProgressChanged += (o, args) =>
                         {
-                            Button button = (Button)buttons[0];
-                            button.BackColor = Color.Orange;
-                        }
-                        progressBarneu.Value = args.ProgressPercentage;
-                        downloadLabel.Text = string.Format("{0} MB's / {1} MB's",
-                            (args.BytesReceived / 1024d / 1024d).ToString("0.00"),
-                            (args.TotalBytesToReceive / 1024d / 1024d).ToString("0.00"));
-                        percLabel.Text = args.ProgressPercentage.ToString() + "%";
-                    };
-                    webClient.DownloadFileCompleted += (o, args) =>
-                    {
-                        if (args.Cancelled == true)
-                        {
-                            MessageBox.Show("Download has been canceled.");
-                        }
-                        else
-                        {
-                            switch (culture1.TwoLetterISOLanguageName)
+                            Control[] buttons = Controls.Find("button" + d, true);
+                            if (buttons.Length > 0)
                             {
-                                case "ru":
-                                    downloadLabel.Text = "Распаковка";
-                                    break;
-                                case "de":
-                                    downloadLabel.Text = "Entpacken";
-                                    break;
-                                default:
-                                    downloadLabel.Text = "Unpacking";
-                                    break;
+                                Button button = (Button)buttons[0];
+                                button.BackColor = Color.Orange;
                             }
-                            string arguments = " x " + "Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe" + " -o" + @"Update\" + entpDir[b] + " -y";
-                            Process process = new Process();
-                            process.StartInfo.FileName = @"Bin\7zr.exe";
-                            process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                            process.StartInfo.Arguments = arguments;
-                            process.Start();
-                            process.WaitForExit();
-                            process.StartInfo.Arguments = " x " + @"Update\" + entpDir[b] + "\\Chrome.7z -o" + @"Update\" + entpDir[b] + " -y";
-                            process.Start();
-                            process.WaitForExit();
-                            if ((File.Exists(@"Update\" + entpDir[b] + "\\chrome-bin\\Chrome.exe")) && (File.Exists(instDir[b] + "\\updates\\Version.log")))
+                            progressBarneu.Value = args.ProgressPercentage;
+                            downloadLabel.Text = string.Format("{0} MB's / {1} MB's",
+                                (args.BytesReceived / 1024d / 1024d).ToString("0.00"),
+                                (args.TotalBytesToReceive / 1024d / 1024d).ToString("0.00"));
+                            percLabel.Text = args.ProgressPercentage.ToString() + "%";
+                        };
+                        webClient.DownloadFileCompleted += (o, args) =>
+                        {
+                            if (args.Error != null)
                             {
-                                string[] instVersion = File.ReadAllText(instDir[b] + "\\updates\\Version.log").Split(new char[] { '|' });
-                                FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Update\\" + entpDir[b] + "\\chrome-bin\\Chrome.exe");
-                                if (checkBox1.Checked)
+                                MessageBox.Show("Download has been canceled.\n" + args.Error.Message);
+                            }
+                            else
+                            {
+                                downloadLabel.Text = Langfile.Texts("downUnpstart");
+                                string arguments = " x " + "Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe" + " -o" + @"Update\" + entpDir[b] + " -y";
+                                Process process = new Process();
+                                process.StartInfo.FileName = @"Bin\7zr.exe";
+                                process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                                process.StartInfo.Arguments = arguments;
+                                process.Start();
+                                process.WaitForExit();
+                                process.StartInfo.Arguments = " x " + @"Update\" + entpDir[b] + "\\Chrome.7z -o" + @"Update\" + entpDir[b] + " -y";
+                                process.Start();
+                                process.WaitForExit();
+                                if ((File.Exists(@"Update\" + entpDir[b] + "\\chrome-bin\\Chrome.exe")) && (File.Exists(instDir[b] + "\\updates\\Version.log")))
                                 {
-                                    if (testm.FileVersion != instVersion[0])
+                                    string[] instVersion = File.ReadAllText(instDir[b] + "\\updates\\Version.log").Split(new char[] { '|' });
+                                    FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Update\\" + entpDir[b] + "\\chrome-bin\\Chrome.exe");
+                                    if (checkBox1.Checked)
+                                    {
+                                        if (testm.FileVersion != instVersion[0])
+                                        {
+                                            if (Directory.Exists(instDir[b] + "\\" + instVersion[0]))
+                                            {
+                                                Directory.Delete(instDir[b] + "\\" + instVersion[0], true);
+                                            }
+                                            Thread.Sleep(2000);
+                                            NewMethod4(b, c, testm, d);
+                                        }
+                                        else if ((testm.FileVersion == instVersion[0]) && (checkBox4.Checked))
+                                        {
+                                            if (Directory.Exists(instDir[b] + "\\" + instVersion[0]))
+                                            {
+                                                Directory.Delete(instDir[d] + "\\" + instVersion[0], true);
+                                            }
+                                            Thread.Sleep(2000);
+                                            NewMethod4(b, c, testm, d);
+                                        }
+                                    }
+                                    else if (!checkBox1.Checked)
                                     {
                                         if (Directory.Exists(instDir[b] + "\\" + instVersion[0]))
                                         {
@@ -422,79 +396,54 @@ namespace Chrome_Updater
                                         Thread.Sleep(2000);
                                         NewMethod4(b, c, testm, d);
                                     }
-                                    else if ((testm.FileVersion == instVersion[0]) && (checkBox4.Checked))
-                                    {
-                                        if (Directory.Exists(instDir[b] + "\\" + instVersion[0]))
-                                        {
-                                            Directory.Delete(instDir[d] + "\\" + instVersion[0], true);
-                                        }
-                                        Thread.Sleep(2000);
-                                        NewMethod4(b, c, testm, d);
-                                    }
                                 }
-                                else if (!checkBox1.Checked)
+                                else
                                 {
-                                    if (Directory.Exists(instDir[b] + "\\" + instVersion[0]))
+                                    if (!Directory.Exists(instDir[b]))
                                     {
-                                        Directory.Delete(instDir[b] + "\\" + instVersion[0], true);
+                                        Directory.CreateDirectory(instDir[b]);
                                     }
-                                    Thread.Sleep(2000);
-                                    NewMethod4(b, c, testm, d);
+                                    NewMethod4(b, c, FileVersionInfo.GetVersionInfo(applicationPath + "\\Update\\" + entpDir[b] + "\\chrome-bin\\Chrome.exe"), d);
                                 }
                             }
-                            else
+                            if (checkBox5.Checked)
                             {
-                                if (!Directory.Exists(instDir[b]))
+                                if (!File.Exists(deskDir + "\\" + instDir[b] + ".lnk"))
                                 {
-                                    Directory.CreateDirectory(instDir[b]);
+                                    NewMethod5(a, b);
                                 }
-                                NewMethod4( b, c, FileVersionInfo.GetVersionInfo(applicationPath + "\\Update\\" + entpDir[b] + "\\chrome-bin\\Chrome.exe"), d);
                             }
-                        }
-                        if (checkBox5.Checked)
-                        {
-                            if (!File.Exists(deskDir + "\\" + instDir[b] + ".lnk"))
+                            else if (File.Exists(deskDir + "\\" + instDir[b] + ".lnk") && (instDir[b] == "Chrome"))
                             {
                                 NewMethod5(a, b);
                             }
-                        }
-                        else if (File.Exists(deskDir + "\\" + instDir[b] + ".lnk") && (instDir[b] == "Chrome"))
+                            if (!File.Exists(@instDir[b] + " Launcher.exe"))
+                            {
+                                File.Copy(@"Bin\Launcher\" + instDir[b] + " Launcher.exe", @instDir[b] + " Launcher.exe");
+                            }
+                            File.Delete("Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe");
+                            downloadLabel.Text = Langfile.Texts("downUnpfine");
+                        };
+                        try
                         {
-                            NewMethod5(a, b);
+                            var task = webClient.DownloadFileTaskAsync(uri, "Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe");
+                            list.Add(task);
                         }
-                        if (!File.Exists(@instDir[b] + " Launcher.exe"))
+                        catch (Exception ex)
                         {
-                            File.Copy(@"Bin\Launcher\" + instDir[b] + " Launcher.exe", @instDir[b] + " Launcher.exe");
+                            MessageBox.Show(ex.Message);
                         }
-                        File.Delete("Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe");
-                        switch (culture1.TwoLetterISOLanguageName)
-                        {
-                            case "ru":
-                                downloadLabel.Text = "Распакованный";
-                                break;
-                            case "de":
-                                downloadLabel.Text = "Entpackt";
-                                break;
-                            default:
-                                downloadLabel.Text = "Unpacked";
-                                break;
-                        }
-                        downloadLabel.Text = culture1.Name != "de-DE" ? "Unpacked" : "Entpackt";
-                    };
-                    try
-                    {
-                        var task = webClient.DownloadFileTaskAsync(uri, "Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe");
-                        list.Add(task);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
                     }
                 }
+                await Task.WhenAll(list);
+                await Task.Delay(2000);
+                Controls.Remove(progressBox);
             }
-            await Task.WhenAll(list);
-            await Task.Delay(2000);
-            Controls.Remove(progressBox);
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error:\n\r" + ex.Message);
+                Controls.Remove(progressBox);
+            }
         }
         public void CheckButton()
         {
@@ -515,18 +464,7 @@ namespace Chrome_Updater
                     }
                     else if (buildversion[i] != instVersion[0])
                     {
-                        switch (culture1.TwoLetterISOLanguageName)
-                        {
-                            case "ru":
-                                button9.Text = "Обновить все";
-                                break;
-                            case "de":
-                                button9.Text = "Alle Updaten";
-                                break;
-                            default:
-                                button9.Text = "Update all";
-                                break;
-                        }
+                        button9.Text = Langfile.Texts("Button9UAll");
                         button9.Enabled = true;
                         button9.BackColor = Color.FromArgb(224, 224, 224);
                         if (buttons.Length > 0)
@@ -630,18 +568,7 @@ namespace Chrome_Updater
         }
         public void Message1()
         {
-            switch (culture1.TwoLetterISOLanguageName)
-            {
-                case "ru":
-                    MessageBox.Show("Данная версия уже установлена", "Portabel Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-                case "de":
-                    MessageBox.Show("Die selbe Version ist bereits installiert", "Portabel Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-                default:
-                    MessageBox.Show("The same version is already installed", "Portabel Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-            }
+            MessageBox.Show(Langfile.Texts("MeassageVersion"), "Portabel Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         private void CheckBox2_CheckedChanged(object sender, EventArgs e)
         {
@@ -900,13 +827,13 @@ namespace Chrome_Updater
             };
             Button laterButton = new Button
             {
-                Size = new Size(40, 23),
+                Size = new Size(50, 23),
                 BackColor = Color.FromArgb(224, 224, 224)
             };
             Button updateButton = new Button
             {
                 Location = new Point(groupBoxupdate.Width - Width - 10, 60),
-                Size = new Size(40, 23),
+                Size = new Size(50, 23),
                 BackColor = Color.FromArgb(224, 224, 224)
             };
             updateButton.Location = new Point(groupBoxupdate.Width - updateButton.Width - 10, 60);
@@ -919,27 +846,10 @@ namespace Chrome_Updater
             groupBoxupdate.Controls.Add(versionLabel);
             updateButton.Click += new EventHandler(UpdateButton_Click);
             laterButton.Click += new EventHandler(LaterButton_Click);
-            switch (culture1.TwoLetterISOLanguageName)
-            {
-                case "ru":
-                    infoLabel.Text = "Доступна новая версия";
-                    laterButton.Text = "нет";
-                    updateButton.Text = "Да";
-                    downLabel.Text = "ОБНОВИТЬ";
-                    break;
-                case "de":
-                    infoLabel.Text = "Eine neue Version ist verfügbar";
-                    laterButton.Text = "Nein";
-                    updateButton.Text = "Ja";
-                    downLabel.Text = "Jetzt Updaten";
-                    break;
-                default:
-                    infoLabel.Text = "A new version is available";
-                    laterButton.Text = "No";
-                    updateButton.Text = "Yes";
-                    downLabel.Text = "Update now";
-                    break;
-            }
+            infoLabel.Text = Langfile.Texts("infoLabel");
+            laterButton.Text = Langfile.Texts("laterButton");
+            updateButton.Text = Langfile.Texts("updateButton");
+            downLabel.Text = Langfile.Texts("downLabel");
             void LaterButton_Click(object sender, EventArgs e)
             {
                 groupBoxupdate.Dispose();
@@ -956,7 +866,7 @@ namespace Chrome_Updater
                    var version = reader.ReadToEnd();
                     FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Portable Chrome Updater.exe");
                     versionLabel.Text = testm.FileVersion + "  >>> " + version;
-                    if (version != testm.FileVersion)
+                    if (Convert.ToInt32(version.Replace(".", "")) > Convert.ToInt32(testm.FileVersion.Replace(".", "")))
                     {
                         Controls.Add(groupBoxupdate);
                         groupBox3.Enabled = false;
@@ -971,31 +881,38 @@ namespace Chrome_Updater
             void UpdateButton_Click(object sender, EventArgs e)
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                var request2 = (WebRequest)HttpWebRequest.Create("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Version.txt");
-                var response2 = request2.GetResponse();
-                using (StreamReader reader = new StreamReader(response2.GetResponseStream()))
+                try
                 {
-                    var version = reader.ReadToEnd();
-                    reader.Close();
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                    using (WebClient myWebClient2 = new WebClient())
+                    var request2 = (WebRequest)HttpWebRequest.Create("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Version.txt");
+                    var response2 = request2.GetResponse();
+                    using (StreamReader reader = new StreamReader(response2.GetResponseStream()))
                     {
-                        myWebClient2.DownloadFile($"https://github.com/UndertakerBen/PorChromeUpd/releases/download/v{version}/Portable.Chrome.Updater.v{version}.7z", @"Portable.Chrome.Updater.v" + version + ".7z");
-                    }
-                    File.AppendAllText(@"Update.cmd", "@echo off" + "\n" +
-                        "timeout /t 1 /nobreak" + "\n" +
-                        "\"" + applicationPath + "\\Bin\\7zr.exe\" e \"" + applicationPath + "\\Portable.Chrome.Updater.v" + version + ".7z\" -o\"" + applicationPath + "\" \"Portable Chrome Updater.exe\"" + " -y\n" +
-                        "call cmd /c Start /b \"\" " + "\"" + applicationPath + "\\Portable Chrome Updater.exe\"\n" +
-                        "del /f /q \"" + applicationPath + "\\Portable.Chrome.Updater.v" + version + ".7z\"\n" +
-                        "del /f /q \"" + applicationPath + "\\Update.cmd\" && exit\n" +
-                        "exit\n");
+                        var version = reader.ReadToEnd();
+                        reader.Close();
+                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                        using (WebClient myWebClient2 = new WebClient())
+                        {
+                            myWebClient2.DownloadFile($"https://github.com/UndertakerBen/PorChromeUpd/releases/download/v{version}/Portable.Chrome.Updater.v{version}.7z", @"Portable.Chrome.Updater.v" + version + ".7z");
+                        }
+                        File.AppendAllText(@"Update.cmd", "@echo off" + "\n" +
+                            "timeout /t 1 /nobreak" + "\n" +
+                            "\"" + applicationPath + "\\Bin\\7zr.exe\" e \"" + applicationPath + "\\Portable.Chrome.Updater.v" + version + ".7z\" -o\"" + applicationPath + "\" \"Portable Chrome Updater.exe\"" + " -y\n" +
+                            "call cmd /c Start /b \"\" " + "\"" + applicationPath + "\\Portable Chrome Updater.exe\"\n" +
+                            "del /f /q \"" + applicationPath + "\\Portable.Chrome.Updater.v" + version + ".7z\"\n" +
+                            "del /f /q \"" + applicationPath + "\\Update.cmd\" && exit\n" +
+                            "exit\n");
 
-                    string arguments = " /c call Update.cmd";
-                    Process process = new Process();
-                    process.StartInfo.FileName = "cmd.exe";
-                    process.StartInfo.Arguments = arguments;
-                    process.Start();
-                    Close();
+                        string arguments = " /c call Update.cmd";
+                        Process process = new Process();
+                        process.StartInfo.FileName = "cmd.exe";
+                        process.StartInfo.Arguments = arguments;
+                        process.Start();
+                        Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error:\n\r" + ex.Message);
                 }
             }
         }
@@ -1005,12 +922,13 @@ namespace Chrome_Updater
             try
             {
                 var request = (WebRequest)HttpWebRequest.Create("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Launcher/Version.txt");
+                //request.Proxy = ProxyClass.ProxyServer;
                 var response = request.GetResponse();
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
                     var version = reader.ReadToEnd();
                     FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Bin\\Launcher\\Chrome Launcher.exe");
-                    if (version != testm.FileVersion)
+                    if (Convert.ToInt32(version.Replace(".", "")) > Convert.ToInt32(testm.FileVersion.Replace(".", "")))
                     {
                         reader.Close();
                         try
@@ -1044,6 +962,304 @@ namespace Chrome_Updater
                         {
 
                         }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+        private void VersinsInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FileVersionInfo updVersion = FileVersionInfo.GetVersionInfo(applicationPath + "\\Portable Chrome Updater.exe");
+            FileVersionInfo launcherVersion = FileVersionInfo.GetVersionInfo(applicationPath + "\\Bin\\Launcher\\Chrome Launcher.exe");
+            MessageBox.Show("Updater Version - " + updVersion.FileVersion + "\nLauncher Version - " + launcherVersion.FileVersion, "Version Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        private void RegistrierenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Regfile.RegCreate(applicationPath, instDir[8], 0);
+        }
+        private void RegistrierenToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Regfile.RegCreate(applicationPath, instDir[3], 0);
+        }
+        private void RegistrierenToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            Regfile.RegCreate(applicationPath, instDir[7], 0);
+        }
+
+        private void RegistrierenToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            Regfile.RegCreate(applicationPath, instDir[2], 9);
+        }
+        private void RegistrierenToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            Regfile.RegCreate(applicationPath, instDir[6], 9);
+        }
+        private void RegistrierenToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            Regfile.RegCreate(applicationPath, instDir[1], 8);
+        }
+        private void RegistrierenToolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            Regfile.RegCreate(applicationPath, instDir[5], 8);
+        }
+        private void RegistrierenToolStripMenuItem7_Click(object sender, EventArgs e)
+        {
+            Regfile.RegCreate(applicationPath, instDir[0], 4);
+        }
+        private void RegistrierenToolStripMenuItem8_Click(object sender, EventArgs e)
+        {
+            Regfile.RegCreate(applicationPath, instDir[4], 4);
+        }
+        private void EntfernenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            registrierenToolStripMenuItem.Enabled = true;
+            Regfile.RegDel();
+        }
+        private void EntfernenToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            registrierenToolStripMenuItem1.Enabled = true;
+            Regfile.RegDel();
+        }
+        private void EntfernenToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            registrierenToolStripMenuItem2.Enabled = true;
+            Regfile.RegDel();
+        }
+        private void EntfernenToolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            registrierenToolStripMenuItem3.Enabled = true;
+            Regfile.RegDel();
+        }
+        private void EntfernenToolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            registrierenToolStripMenuItem4.Enabled = true;
+            Regfile.RegDel();
+        }
+        private void EntfernenToolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            registrierenToolStripMenuItem5.Enabled = true;
+            Regfile.RegDel();
+        }
+        private void EntfernenToolStripMenuItem6_Click(object sender, EventArgs e)
+        {
+            registrierenToolStripMenuItem6.Enabled = true;
+            Regfile.RegDel();
+        }
+        private void EntfernenToolStripMenuItem7_Click(object sender, EventArgs e)
+        {
+            registrierenToolStripMenuItem7.Enabled = true;
+            Regfile.RegDel();
+        }
+        private void EntfernenToolStripMenuItem8_Click(object sender, EventArgs e)
+        {
+            registrierenToolStripMenuItem8.Enabled = true;
+            Regfile.RegDel();
+        }
+        private void ExtrasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Microsoft.Win32.RegistryKey key;
+                if (Microsoft.Win32.Registry.GetValue("HKEY_Current_User\\Software\\Clients\\StartMenuInternet\\Google Chrome.PORTABLE", default, null) != null)
+                {
+                    key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\\Clients\\StartMenuInternet\\Google Chrome.PORTABLE", false);
+                    switch (key.GetValue(default).ToString())
+                    {
+                        case "Google Chrome Portable":
+                            key.Close();
+                            registrierenToolStripMenuItem.Enabled = false;
+                            chromeAlsStandardToolStripMenuItem.Enabled = true;
+                            chromeStableX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetax86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetaX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX64AlsStandardToolStripMenuItem.Enabled = false;
+                            break;
+                        case "Google Chrome Stable x86 Portable":
+                            key.Close();
+                            registrierenToolStripMenuItem1.Enabled = false;
+                            chromeAlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX86AlsStandardToolStripMenuItem.Enabled = true;
+                            chromeStableX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetax86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetaX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX64AlsStandardToolStripMenuItem.Enabled = false;
+                            break;
+                        case "Google Chrome Stable x64 Portable":
+                            key.Close();
+                            registrierenToolStripMenuItem2.Enabled = false;
+                            chromeAlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX64AlsStandardToolStripMenuItem.Enabled = true;
+                            chromeBetax86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetaX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX64AlsStandardToolStripMenuItem.Enabled = false;
+                            break;
+                        case "Google Chrome Beta x86 Portable":
+                            key.Close();
+                            registrierenToolStripMenuItem3.Enabled = false;
+                            chromeAlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetax86AlsStandardToolStripMenuItem.Enabled = true;
+                            chromeBetaX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX64AlsStandardToolStripMenuItem.Enabled = false;
+                            break;
+                        case "Google Chrome Beta x64 Portable":
+                            key.Close();
+                            registrierenToolStripMenuItem4.Enabled = false;
+                            chromeAlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetax86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetaX64AlsStandardToolStripMenuItem.Enabled = true;
+                            chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX64AlsStandardToolStripMenuItem.Enabled = false;
+                            break;
+                        case "Google Chrome Dev x86 Portable":
+                            key.Close();
+                            registrierenToolStripMenuItem5.Enabled = false;
+                            chromeAlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetax86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetaX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = true;
+                            chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX64AlsStandardToolStripMenuItem.Enabled = false;
+                            break;
+                        case "Google Chrome Dev x64 Portable":
+                            key.Close();
+                            registrierenToolStripMenuItem6.Enabled = false;
+                            chromeAlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetax86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetaX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = true;
+                            chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX64AlsStandardToolStripMenuItem.Enabled = false;
+                            break;
+                        case "Google Chrome Canary x86 Portable":
+                            key.Close();
+                            registrierenToolStripMenuItem7.Enabled = false;
+                            chromeAlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetax86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetaX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = true;
+                            chromeCanaryX64AlsStandardToolStripMenuItem.Enabled = false;
+                            break;
+                        case "Google Chrome Canary x64 Portable":
+                            key.Close();
+                            registrierenToolStripMenuItem8.Enabled = false;
+                            chromeAlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeStableX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetax86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeBetaX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = false;
+                            chromeCanaryX64AlsStandardToolStripMenuItem.Enabled = true;
+                            break;
+                    }
+                }
+                else
+                {
+                    if (Directory.Exists(@"Chrome"))
+                    {
+                        chromeAlsStandardToolStripMenuItem.Enabled = true;
+                    }
+                    else
+                    {
+                        chromeAlsStandardToolStripMenuItem.Enabled = false;
+                    }
+                    if (Directory.Exists(@"Chrome Stable x86"))
+                    {
+                        chromeStableX86AlsStandardToolStripMenuItem.Enabled = true;
+                    }
+                    else
+                    {
+                        chromeStableX86AlsStandardToolStripMenuItem.Enabled = false;
+                    }
+                    if (Directory.Exists(@"Chrome Stable x64"))
+                    {
+                        chromeStableX64AlsStandardToolStripMenuItem.Enabled = true;
+                    }
+                    else
+                    {
+                        chromeStableX64AlsStandardToolStripMenuItem.Enabled = false;
+                    }
+                    if (Directory.Exists(@"Chrome Beta x86"))
+                    {
+                        chromeBetax86AlsStandardToolStripMenuItem.Enabled = true;
+                    }
+                    else
+                    {
+                        chromeBetax86AlsStandardToolStripMenuItem.Enabled = false;
+                    }
+                    if (Directory.Exists(@"Chrome Beta x64"))
+                    {
+                        chromeBetaX64AlsStandardToolStripMenuItem.Enabled = true;
+                    }
+                    else
+                    {
+                        chromeBetaX64AlsStandardToolStripMenuItem.Enabled = false;
+                    }
+                    if (Directory.Exists(@"Chrome Dev x86"))
+                    {
+                        chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = true;
+                    }
+                    else
+                    {
+                        chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = false;
+                    }
+                    if (Directory.Exists(@"Chrome Dev x64"))
+                    {
+                        chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = true;
+                    }
+                    else
+                    {
+                        chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = false;
+                    }
+                    if (Directory.Exists(@"Chrome Canary x86"))
+                    {
+                        chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = true;
+                    }
+                    else
+                    {
+                        chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = false;
+                    }
+                    if (Directory.Exists(@"Chrome Canary x64"))
+                    {
+                        chromeCanaryX64AlsStandardToolStripMenuItem.Enabled = true;
+                    }
+                    else
+                    {
+                        chromeCanaryX64AlsStandardToolStripMenuItem.Enabled = false;
                     }
                 }
             }
