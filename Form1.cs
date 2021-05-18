@@ -29,6 +29,7 @@ namespace Chrome_Updater
         readonly string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
         readonly string applicationPath = Application.StartupPath;
         private readonly CultureInfo culture1 = CultureInfo.CurrentUICulture;
+        private readonly string[] CommandLineArgs = Environment.GetCommandLineArgs();
         private readonly ToolTip toolTip = new ToolTip();
         
         public Form1()
@@ -38,6 +39,7 @@ namespace Chrome_Updater
             {
                 for (int i = 0; i <= 3; i++)
                 {
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                     WebRequest request = WebRequest.Create("http://tools.google.com/service/update2");
                     request.Method = "POST";
                     request.ContentType = "application/x-www-form-urlencoded";
@@ -79,15 +81,15 @@ namespace Chrome_Updater
             }
             if (IntPtr.Size == 8)
             {
-                if (File.Exists(@"Chrome Canary x64\Chrome.exe") || File.Exists(@"Chrome Dev x64\Chrome.exe") || File.Exists(@"Chrome Beta x64\Chrome.exe") || File.Exists(@"Chrome Stable x64\Chrome.exe"))
+                if (File.Exists($"{applicationPath}\\Chrome Canary x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x64\\Chrome.exe"))
                 {
                     checkBox3.Enabled = false;
                 }
-                if (File.Exists(@"Chrome Canary x86\Chrome.exe") || File.Exists(@"Chrome Dev x86\Chrome.exe") || File.Exists(@"Chrome Beta x86\Chrome.exe") || File.Exists(@"Chrome Stable x86\Chrome.exe"))
+                if (File.Exists($"{applicationPath}\\Chrome Canary x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x86\\Chrome.exe"))
                 {
                     checkBox2.Enabled = false;
                 }
-                if (File.Exists(@"Chrome Canary x86\Chrome.exe") || File.Exists(@"Chrome Dev x86\Chrome.exe") || File.Exists(@"Chrome Beta x86\Chrome.exe") || File.Exists(@"Chrome Stable x86\Chrome.exe") || File.Exists(@"Chrome Canary x64\Chrome.exe") || File.Exists(@"Chrome Dev x64\Chrome.exe") || File.Exists(@"Chrome Beta x64\Chrome.exe") || File.Exists(@"Chrome Stable x64\Chrome.exe"))
+                if (File.Exists($"{applicationPath}\\Chrome Canary x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Canary x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x64\\Chrome.exe"))
                 {
                     checkBox1.Checked = true;
                     CheckButton();
@@ -99,7 +101,7 @@ namespace Chrome_Updater
                     button9.Enabled = false;
                     button9.BackColor = Color.FromArgb(244, 244, 244);
 
-                    if (File.Exists(@"Chrome\Chrome.exe"))
+                    if (File.Exists($"{applicationPath}\\Chrome\\Chrome.exe"))
                     {
                         CheckButton2();
                     }
@@ -107,7 +109,7 @@ namespace Chrome_Updater
             }
             else if (IntPtr.Size != 8)
             {
-                if (File.Exists(@"Chrome Canary x86\Chrome.exe") || File.Exists(@"Chrome Dev x86\Chrome.exe") || File.Exists(@"Chrome Beta x86\Chrome.exe") || File.Exists(@"Chrome Stable x86\Chrome.exe"))
+                if (File.Exists($"{applicationPath}\\Chrome Canary x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x86\\Chrome.exe"))
                 {
                     checkBox1.Checked = true;
                     checkBox2.Enabled = false;
@@ -119,13 +121,12 @@ namespace Chrome_Updater
                     button9.Enabled = false;
                     button9.BackColor = Color.FromArgb(244, 244, 244);
 
-                    if (File.Exists(@"Chrome\Chrome.exe"))
+                    if (File.Exists($"{applicationPath}\\Chrome\\Chrome.exe"))
                     {
                         CheckButton2();
                     }
                 }
             }
-            CheckUpdate();
             foreach (Process proc in Process.GetProcesses())
             {
                 if (proc.ProcessName.Equals("Chrome"))
@@ -135,6 +136,20 @@ namespace Chrome_Updater
                 }
             }
             CheckLauncher();
+            _ = TestCheck();
+        }
+        private async Task TestCheck()
+        {
+            await CheckUpdate();
+            for (int i = 0; i < CommandLineArgs.GetLength(0); i++)
+            {
+                if (CommandLineArgs[i].ToLower().Equals("-updateall"))
+                {
+                    await UpdateAll();
+                    await Task.Delay(2000);
+                    Application.Exit();
+                }
+            }
         }
         private async void Button1_Click(object sender, EventArgs e)
         {
@@ -230,7 +245,7 @@ namespace Chrome_Updater
         }
         private async Task Testing()
         {
-            if ((!Directory.Exists(@"Chrome Canary x86")) && (!Directory.Exists(@"Chrome Dev x86")) && (!Directory.Exists(@"Chrome Beta x86")) && (!Directory.Exists(@"Chrome Stable x86")))
+            if ((!Directory.Exists($"{applicationPath}\\Chrome Canary x86")) && (!Directory.Exists($"{applicationPath}\\Chrome Dev x86")) && (!Directory.Exists($"{applicationPath}\\Chrome Beta x86")) && (!Directory.Exists($"{applicationPath}\\Chrome Stable x86")))
             {
                 if (checkBox2.Checked)
                 {
@@ -247,7 +262,7 @@ namespace Chrome_Updater
             await NewMethod2(3, 3, 0, 4);
             if (IntPtr.Size == 8)
             {
-                if ((!Directory.Exists(@"Chrome Canary x64")) && (!Directory.Exists(@"Chrome Dev x64")) && (!Directory.Exists(@"Chrome Beta x64")) && (!Directory.Exists(@"Chrome Stable x64")))
+                if ((!Directory.Exists($"{applicationPath}\\Chrome Canary x64")) && (!Directory.Exists($"{applicationPath}\\Chrome Dev x64")) && (!Directory.Exists($"{applicationPath}\\Chrome Beta x64")) && (!Directory.Exists($"{applicationPath}\\Chrome Stable x64")))
                 {
                     if (checkBox3.Checked)
                     {
@@ -263,6 +278,71 @@ namespace Chrome_Updater
                 await NewMethod2(2, 6, 1, 7);
                 await NewMethod2(3, 7, 1, 8);
             }
+        }
+        private async Task UpdateAll()
+        {
+            if (Directory.Exists($"{applicationPath}\\Chrome"))
+            {
+                string[] instVersion = File.ReadAllText($"{applicationPath}\\Chrome\\updates\\Version.log").Split(new char[] { '|' });
+                if (instVersion[1] == "Canary" & instVersion[2] == "x86")
+                {
+                    if (new Version(buildversion[0]) > new Version(instVersion[0]))
+                    {
+                        await NewMethod1(0, 0, 1);
+                    }
+                }
+                if (instVersion[1] == "Developer" & instVersion[2] == "x86")
+                {
+                    if (new Version(buildversion[1]) > new Version(instVersion[0]))
+                    {
+                        await NewMethod1(1, 0, 2);
+                    }
+                }
+                if (instVersion[1] == "Beta" & instVersion[2] == "x86")
+                {
+                    if (new Version(buildversion[2]) > new Version(instVersion[0]))
+                    {
+                        await NewMethod1(2, 0, 3);
+                    }
+                }
+                if (instVersion[1] == "Stable" & instVersion[2] == "x86")
+                {
+                    if (new Version(buildversion[3]) > new Version(instVersion[0]))
+                    {
+                        await NewMethod1(3, 0, 4);
+                    }
+                }
+                if (instVersion[1] == "Canary" & instVersion[2] == "x64")
+                {
+                    if (new Version(buildversion[4]) > new Version(instVersion[0]))
+                    {
+                        await NewMethod1(0, 1, 5);
+                    }
+                }
+                if (instVersion[1] == "Developer" & instVersion[2] == "x64")
+                {
+                    if (new Version(buildversion[5]) > new Version(instVersion[0]))
+                    {
+                        await NewMethod1(1, 1, 6);
+                    }
+                }
+                if (instVersion[1] == "Beta" & instVersion[2] == "x64")
+                {
+                    if (new Version(buildversion[6]) > new Version(instVersion[0]))
+                    {
+                        await NewMethod1(2, 1, 7);
+                    }
+                }
+                if (instVersion[1] == "Stable" & instVersion[2] == "x64")
+                {
+                    if (new Version(buildversion[7]) > new Version(instVersion[0]))
+                    {
+                        await NewMethod1(3, 1, 8);
+                    }
+                }
+            }
+            await Testing();
+            await Task.WhenAll();
         }
         public async Task DownloadFile(int a, int b, int c, int d)
         {
@@ -352,46 +432,34 @@ namespace Chrome_Updater
                             else
                             {
                                 downloadLabel.Text = Langfile.Texts("downUnpstart");
-                                string arguments = " x " + "Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe" + " -o" + @"Update\" + entpDir[b] + " -y";
+                                string arguments = $" x \"{applicationPath}\\Chrome_{architektur[c]}_{buildversion[a]}_{ring[a]}.exe\" -o\"{applicationPath}\\Update\\{entpDir[b]}\" -y";
                                 Process process = new Process();
-                                process.StartInfo.FileName = @"Bin\7zr.exe";
+                                process.StartInfo.FileName = $"{applicationPath}\\Bin\\7zr.exe";
                                 process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
                                 process.StartInfo.Arguments = arguments;
                                 process.Start();
                                 process.WaitForExit();
-                                process.StartInfo.Arguments = " x " + @"Update\" + entpDir[b] + "\\Chrome.7z -o" + @"Update\" + entpDir[b] + " -y";
+                                process.StartInfo.Arguments = $" x \"{applicationPath}\\Update\\{entpDir[b]}\\Chrome.7z\" -o\"{applicationPath}\\Update\\{entpDir[b]}\" -y";
                                 process.Start();
                                 process.WaitForExit();
-                                if ((File.Exists(@"Update\" + entpDir[b] + "\\chrome-bin\\Chrome.exe")) && (File.Exists(instDir[b] + "\\updates\\Version.log")))
+                                if (File.Exists($"{applicationPath}\\Update\\{entpDir[b]}\\chrome-bin\\Chrome.exe") && File.Exists($"{applicationPath}\\{instDir[b]}\\updates\\Version.log"))
                                 {
-                                    string[] instVersion = File.ReadAllText(instDir[b] + "\\updates\\Version.log").Split(new char[] { '|' });
-                                    FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Update\\" + entpDir[b] + "\\chrome-bin\\Chrome.exe");
-                                    if (checkBox1.Checked)
+                                    string[] instVersion = File.ReadAllText($"{applicationPath}\\{instDir[b]}\\updates\\Version.log").Split(new char[] { '|' });
+                                    Version testm = new Version(FileVersionInfo.GetVersionInfo($"{applicationPath}\\Update\\{entpDir[b]}\\chrome-bin\\Chrome.exe").FileVersion);
+                                    if (testm != new Version(instVersion[0]))
                                     {
-                                        if (testm.FileVersion != instVersion[0])
+                                        if (Directory.Exists($"{applicationPath}\\{instDir[b]}\\{instVersion[0]}"))
                                         {
-                                            if (Directory.Exists(instDir[b] + "\\" + instVersion[0]))
-                                            {
-                                                Directory.Delete(instDir[b] + "\\" + instVersion[0], true);
-                                            }
-                                            Thread.Sleep(2000);
-                                            NewMethod4(b, c, testm, d);
+                                            Directory.Delete($"{applicationPath}\\{instDir[b]}\\{instVersion[0]}", true);
                                         }
-                                        else if ((testm.FileVersion == instVersion[0]) && (checkBox4.Checked))
-                                        {
-                                            if (Directory.Exists(instDir[b] + "\\" + instVersion[0]))
-                                            {
-                                                Directory.Delete(instDir[d] + "\\" + instVersion[0], true);
-                                            }
-                                            Thread.Sleep(2000);
-                                            NewMethod4(b, c, testm, d);
-                                        }
+                                        Thread.Sleep(2000);
+                                        NewMethod4(b, c, testm, d);
                                     }
-                                    else if (!checkBox1.Checked)
+                                    else if ((testm == new Version(instVersion[0])) && (checkBox4.Checked))
                                     {
-                                        if (Directory.Exists(instDir[b] + "\\" + instVersion[0]))
+                                        if (Directory.Exists($"{applicationPath}\\{instDir[b]}\\{instVersion[0]}"))
                                         {
-                                            Directory.Delete(instDir[b] + "\\" + instVersion[0], true);
+                                            Directory.Delete($"{applicationPath}\\{instDir[d]}\\{instVersion[0]}", true);
                                         }
                                         Thread.Sleep(2000);
                                         NewMethod4(b, c, testm, d);
@@ -399,34 +467,34 @@ namespace Chrome_Updater
                                 }
                                 else
                                 {
-                                    if (!Directory.Exists(instDir[b]))
+                                    if (!Directory.Exists($"{applicationPath}\\{instDir[b]}"))
                                     {
-                                        Directory.CreateDirectory(instDir[b]);
+                                        Directory.CreateDirectory($"{applicationPath}\\{instDir[b]}");
                                     }
-                                    NewMethod4(b, c, FileVersionInfo.GetVersionInfo(applicationPath + "\\Update\\" + entpDir[b] + "\\chrome-bin\\Chrome.exe"), d);
+                                    NewMethod4(b, c, new Version(FileVersionInfo.GetVersionInfo($"{applicationPath}\\Update\\{entpDir[b]}\\chrome-bin\\Chrome.exe").FileVersion), d);
                                 }
                             }
                             if (checkBox5.Checked)
                             {
-                                if (!File.Exists(deskDir + "\\" + instDir[b] + ".lnk"))
+                                if (!File.Exists($"{deskDir}\\{instDir[b]}.lnk"))
                                 {
                                     NewMethod5(a, b);
                                 }
                             }
-                            else if (File.Exists(deskDir + "\\" + instDir[b] + ".lnk") && (instDir[b] == "Chrome"))
+                            else if (File.Exists($"{deskDir}\\{instDir[b]}.lnk") && ($"{applicationPath}\\{instDir[b]}" == "Chrome"))
                             {
                                 NewMethod5(a, b);
                             }
-                            if (!File.Exists(@instDir[b] + " Launcher.exe"))
+                            if (!File.Exists($"{applicationPath}\\{instDir[b]} Launcher.exe"))
                             {
-                                File.Copy(@"Bin\Launcher\" + instDir[b] + " Launcher.exe", @instDir[b] + " Launcher.exe");
+                                File.Copy($"{applicationPath}\\Bin\\Launcher\\{instDir[b]} Launcher.exe", $"{applicationPath}\\{instDir[b]} Launcher.exe");
                             }
-                            File.Delete("Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe");
+                            File.Delete($"{applicationPath}\\Chrome_{architektur[c]}_{buildversion[a]}_{ring[a]}.exe");
                             downloadLabel.Text = Langfile.Texts("downUnpfine");
                         };
                         try
                         {
-                            var task = webClient.DownloadFileTaskAsync(uri, "Chrome_" + architektur[c] + "_" + buildversion[a] + "_" + ring[a] + ".exe");
+                            var task = webClient.DownloadFileTaskAsync(uri, $"{applicationPath}\\Chrome_{architektur[c]}_{buildversion[a]}_{ring[a]}.exe");
                             list.Add(task);
                         }
                         catch (Exception ex)
@@ -450,10 +518,10 @@ namespace Chrome_Updater
             NewMethod3();
             for (int i = 0; i <= 7; i++)
             {
-                if (File.Exists(@instDir[i] + "\\updates\\Version.log"))
+                if (File.Exists($"{applicationPath}\\{instDir[i]}\\updates\\Version.log"))
                 {
                     Control[] buttons = Controls.Find("button" + (i + 1), true);
-                    string[] instVersion = File.ReadAllText(@instDir[i] + "\\updates\\Version.log").Split(new char[] { '|' });
+                    string[] instVersion = File.ReadAllText($"{applicationPath}\\{instDir[i]}\\updates\\Version.log").Split(new char[] { '|' });
                     if (buildversion[i] == instVersion[0])
                     {
                         if (buttons.Length > 0)
@@ -480,22 +548,8 @@ namespace Chrome_Updater
         {
             if (checkBox1.Checked)
             {
-                if (File.Exists(@"Chrome Canary x64\Chrome.exe") || File.Exists(@"Chrome Dev x64\Chrome.exe") || File.Exists(@"Chrome Beta x64\Chrome.exe") || File.Exists(@"Chrome Stable x64\Chrome.exe"))
-                {
-                    checkBox3.Enabled = false;
-                }
-                else
-                {
-                    checkBox3.Enabled = true;
-                }
-                if (File.Exists(@"Chrome Canary x86\Chrome.exe") || File.Exists(@"Chrome Dev x86\Chrome.exe") || File.Exists(@"Chrome Beta x86\Chrome.exe") || File.Exists(@"Chrome Stable x86\Chrome.exe"))
-                {
-                    checkBox2.Enabled = false;
-                }
-                else
-                {
-                    checkBox2.Enabled = true;
-                }
+                checkBox3.Enabled = !File.Exists($"{applicationPath}\\Chrome Canary x64\\Chrome.exe") && !File.Exists($"{applicationPath}\\Chrome Dev x64\\Chrome.exe") && !File.Exists($"{applicationPath}\\Chrome Beta x64\\Chrome.exe") && !File.Exists($"{applicationPath}\\Chrome Stable x64\\Chrome.exe");
+                checkBox2.Enabled = !File.Exists($"{applicationPath}\\Chrome Canary x86\\Chrome.exe") && !File.Exists($"{applicationPath}\\Chrome Dev x86\\Chrome.exe") && !File.Exists($"{applicationPath}\\Chrome Beta x86\\Chrome.exe") && !File.Exists($"{applicationPath}\\Chrome Stable x86\\Chrome.exe");
                 if (button9.Enabled)
                 {
                     button9.BackColor = Color.FromArgb(224, 224, 224);
@@ -514,9 +568,9 @@ namespace Chrome_Updater
         public void CheckButton2()
         {
             NewMethod3();
-            if (File.Exists(@"Chrome\updates\Version.log"))
+            if (File.Exists($"{applicationPath}\\Chrome\\updates\\Version.log"))
             {
-                string[] instVersion = File.ReadAllText(@"Chrome\updates\Version.log").Split(new char[] { '|' });
+                string[] instVersion = File.ReadAllText($"{applicationPath}\\Chrome\\updates\\Version.log").Split(new char[] { '|' });
                 switch (instVersion[1])
                 {
                     case "Canary":
@@ -602,9 +656,9 @@ namespace Chrome_Updater
         }
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (Directory.Exists(@"Update"))
+            if (Directory.Exists($"{applicationPath}\\Update"))
             {
-                Directory.Delete(@"Update", true);
+                Directory.Delete($"{applicationPath}\\Update", true);
             }
         }
         private void Button9_EnabledChanged(object sender, EventArgs e)
@@ -616,9 +670,9 @@ namespace Chrome_Updater
         }
         private async Task NewMethod(int a, int b, int c, int d)
         {
-            if (File.Exists(@instDir[b] + "\\updates\\Version.log"))
+            if (File.Exists($"{applicationPath}\\{instDir[b]}\\updates\\Version.log"))
             {
-                if (File.ReadAllText(instDir[b] + "\\updates\\Version.log").Split(new char[] { '|' })[0] == buildversion[a])
+                if (File.ReadAllText($"{applicationPath}\\{instDir[b]}\\updates\\Version.log").Split(new char[] { '|' })[0] == buildversion[a])
                 {
                     if (checkBox4.Checked)
                     {
@@ -641,9 +695,9 @@ namespace Chrome_Updater
         }
         private async Task NewMethod1(int a, int b, int c)
         {
-            if (File.Exists(@"Chrome\updates\Version.log"))
+            if (File.Exists($"{applicationPath}\\Chrome\\updates\\Version.log"))
             {
-                string[] instVersion = File.ReadAllText(@"Chrome\updates\Version.log").Split(new char[] { '|' });
+                string[] instVersion = File.ReadAllText($"{applicationPath}\\Chrome\\updates\\Version.log").Split(new char[] { '|' });
                 if ((instVersion[0] == buildversion[a]) && (instVersion[1] == ring2[a]) && (instVersion[2] == architektur2[b]))
                 {
                     if (checkBox4.Checked)
@@ -667,11 +721,11 @@ namespace Chrome_Updater
         }
         private async Task NewMethod2(int a, int b, int c, int d)
         {
-            if (Directory.Exists(instDir[b]))
+            if (Directory.Exists($"{applicationPath}\\{instDir[b]}"))
             {
-                if (File.Exists(instDir[b] + "\\updates\\Version.log"))
+                if (File.Exists($"{applicationPath}\\{instDir[b]}\\updates\\Version.log"))
                 {
-                    if (File.ReadAllText(instDir[b] + "\\updates\\Version.log").Split(new char[] { '|' })[0] != buildversion[a])
+                    if (File.ReadAllText($"{applicationPath}\\{instDir[b]}\\updates\\Version.log").Split(new char[] { '|' })[0] != buildversion[a])
                     {
                         await DownloadFile(a, b, c, d);
                     }
@@ -690,17 +744,17 @@ namespace Chrome_Updater
                 }
             }
         }
-        private void NewMethod4(int b, int c, FileVersionInfo testm, int d)
+        private void NewMethod4(int b, int c, Version testm, int d)
         {
-            Directory.Move(@"Update\" + entpDir[b] + "\\chrome-bin" + "\\" + testm.FileVersion, instDir[b] + "\\" + testm.FileVersion);
-            File.Copy(@"Update\" + entpDir[b] + "\\Chrome-bin\\Chrome.exe", instDir[b] + "\\Chrome.exe", true);
-            File.Copy(@"Update\" + entpDir[b] + "\\Chrome-bin\\Chrome_proxy.exe", instDir[b] + "\\Chrome_proxy.exe", true);
-            if (!Directory.Exists(instDir[b] + "\\updates"))
+            Directory.Move($"{applicationPath}\\Update\\{entpDir[b]}\\chrome-bin\\{testm}", $"{applicationPath}\\{instDir[b]}\\{testm}");
+            File.Copy($"{applicationPath}\\Update\\{entpDir[b]}\\Chrome-bin\\Chrome.exe", $"{applicationPath}\\{instDir[b]}\\Chrome.exe", true);
+            File.Copy($"{applicationPath}\\Update\\{entpDir[b]}\\Chrome-bin\\Chrome_proxy.exe", $"{applicationPath}\\{instDir[b]}\\Chrome_proxy.exe", true);
+            if (!Directory.Exists($"{applicationPath}\\{instDir[b]}\\updates"))
             {
-                Directory.CreateDirectory(instDir[b] + "\\updates");
+                Directory.CreateDirectory($"{applicationPath}\\{instDir[b]}\\updates");
             }
-            File.WriteAllText(instDir[b] + "\\updates\\Version.log", testm.FileVersion + "|" + ring2[d - 1] + "|" + architektur2[c]);
-            Directory.Delete(@"Update\" + entpDir[b], true);
+            File.WriteAllText($"{applicationPath}\\{instDir[b]}\\updates\\Version.log", testm + "|" + ring2[d - 1] + "|" + architektur2[c]);
+            Directory.Delete($"{applicationPath}\\Update\\{entpDir[b]}", true);
             if (checkBox1.Checked)
             {
                 CheckButton();
@@ -713,10 +767,10 @@ namespace Chrome_Updater
         private void NewMethod5(int a, int b)
         {
             IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
-            IWshRuntimeLibrary.IWshShortcut link = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(deskDir + "\\" + instDir[b] + ".lnk");
-            link.IconLocation = applicationPath + "\\" + instDir[b] + "\\Chrome.exe" + "," + icon[a];
+            IWshRuntimeLibrary.IWshShortcut link = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut($"{deskDir}\\{instDir[b]}.lnk");
+            link.IconLocation = $"{applicationPath}\\{instDir[b]}\\Chrome.exe,{icon[a]}";
             link.WorkingDirectory = applicationPath;
-            link.TargetPath = applicationPath + "\\" + instDir[b] + " Launcher.exe";
+            link.TargetPath = $"{applicationPath}\\{instDir[b]} Launcher.exe";
             link.Save();
         }
         private void NewMethod6(string[] instVersion, int a, int b, int c)
@@ -768,16 +822,16 @@ namespace Chrome_Updater
             Button button = (Button)buttons[0];
             if (!checkBox1.Checked)
             {
-                if (File.Exists(@"Chrome\updates\Version.log"))
+                if (File.Exists($"{applicationPath}\\Chrome\\updates\\Version.log"))
                 {
-                    NewMethod8(a, arch, button, File.ReadAllText(@"Chrome\updates\Version.log").Split(new char[] { '|' }));
+                    NewMethod8(a, arch, button, File.ReadAllText($"{applicationPath}\\Chrome\\updates\\Version.log").Split(new char[] { '|' }));
                 }
             }
             if (checkBox1.Checked)
             {
-                if (File.Exists(instDir[a] + "\\updates\\Version.log"))
+                if (File.Exists($"{applicationPath}\\{instDir[a]}\\updates\\Version.log"))
                 {
-                    NewMethod8(a, arch, button, File.ReadAllText(instDir[a] + "\\updates\\Version.log").Split(new char[] { '|' }));
+                    NewMethod8(a, arch, button, File.ReadAllText($"{applicationPath}\\{instDir[a]}\\updates\\Version.log").Split(new char[] { '|' }));
                 }
             }
         }
@@ -793,7 +847,7 @@ namespace Chrome_Updater
                 toolTip.SetToolTip(button, String.Empty);
             }
         }
-        private void CheckUpdate()
+        private async Task CheckUpdate()
         {
             GroupBox groupBoxupdate = new GroupBox
             {
@@ -863,20 +917,46 @@ namespace Chrome_Updater
                 var response = request.GetResponse();
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
-                   var version = reader.ReadToEnd();
-                    FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Portable Chrome Updater.exe");
-                    versionLabel.Text = testm.FileVersion + "  >>> " + version;
-                    if (Convert.ToInt32(version.Replace(".", "")) > Convert.ToInt32(testm.FileVersion.Replace(".", "")))
+                    Version version = new Version(reader.ReadToEnd());
+                    Version testm = new Version(FileVersionInfo.GetVersionInfo($"{applicationPath}\\Portable Chrome Updater.exe").FileVersion);
+                    versionLabel.Text = testm + "  >>> " + version;
+                    if (version > testm)
                     {
+                        for (int i = 0; i < CommandLineArgs.GetLength(0); i++)
+                        {
+                            if (CommandLineArgs[i].ToLower().Equals("-updateall"))
+                            {
+                                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                                using (WebClient myWebClient2 = new WebClient())
+                                {
+                                    myWebClient2.DownloadFile($"https://github.com/UndertakerBen/PorChromeUpd/releases/download/v{version}/Portable.Chrome.Updater.v{version}.7z", $"{applicationPath}\\Portable.Chrome.Updater.v{version}.7z");
+                                }
+                                File.AppendAllText($"{applicationPath}\\Update.cmd", "@echo off" + "\r\n" +
+                                    "timeout /t 5 /nobreak" + "\r\n" +
+                                    "\"" + applicationPath + "\\Bin\\7zr.exe\" e \"" + applicationPath + "\\Portable.Chrome.Updater.v" + version + ".7z\" -o\"" + applicationPath + "\" \"Portable Chrome Updater.exe\"" + " -y\r\n" +
+                                    "call cmd /c Start /b \"\" " + "\"" + applicationPath + "\\Portable Chrome Updater.exe\" -UpdateAll\r\n" +
+                                    "del /f /q \"" + applicationPath + "\\Portable.Chrome.Updater.v" + version + ".7z\"\r\n" +
+                                    "del /f /q \"" + applicationPath + "\\Update.cmd\" && exit\r\n" +
+                                    "exit\r\n");
+                                
+                                string arguments = $" /c call \"{applicationPath}\\Update.cmd\"";
+                                Process process = new Process();
+                                process.StartInfo.FileName = "cmd.exe";
+                                process.StartInfo.Arguments = arguments;
+                                process.Start();
+                                Close();
+                                await Task.Delay(3000);
+                            }
+                        }
                         Controls.Add(groupBoxupdate);
                         groupBox3.Enabled = false;
                     }
                     reader.Close();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
+                MessageBox.Show($"Update Updater Error\r\n{ex.Message}");
             }
             void UpdateButton_Click(object sender, EventArgs e)
             {
@@ -892,17 +972,17 @@ namespace Chrome_Updater
                         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                         using (WebClient myWebClient2 = new WebClient())
                         {
-                            myWebClient2.DownloadFile($"https://github.com/UndertakerBen/PorChromeUpd/releases/download/v{version}/Portable.Chrome.Updater.v{version}.7z", @"Portable.Chrome.Updater.v" + version + ".7z");
+                            myWebClient2.DownloadFile($"https://github.com/UndertakerBen/PorChromeUpd/releases/download/v{version}/Portable.Chrome.Updater.v{version}.7z", $"{applicationPath}\\Portable.Chrome.Updater.v{version}.7z");
                         }
-                        File.AppendAllText(@"Update.cmd", "@echo off" + "\n" +
-                            "timeout /t 1 /nobreak" + "\n" +
+                        File.AppendAllText($"{applicationPath}\\Update.cmd", "@echo off" + "\n" +
+                            "timeout /t 2 /nobreak" + "\n" +
                             "\"" + applicationPath + "\\Bin\\7zr.exe\" e \"" + applicationPath + "\\Portable.Chrome.Updater.v" + version + ".7z\" -o\"" + applicationPath + "\" \"Portable Chrome Updater.exe\"" + " -y\n" +
                             "call cmd /c Start /b \"\" " + "\"" + applicationPath + "\\Portable Chrome Updater.exe\"\n" +
                             "del /f /q \"" + applicationPath + "\\Portable.Chrome.Updater.v" + version + ".7z\"\n" +
                             "del /f /q \"" + applicationPath + "\\Update.cmd\" && exit\n" +
                             "exit\n");
 
-                        string arguments = " /c call Update.cmd";
+                        string arguments = $" /c call \"{applicationPath}\\Update.cmd\"";
                         Process process = new Process();
                         process.StartInfo.FileName = "cmd.exe";
                         process.StartInfo.Arguments = arguments;
@@ -915,6 +995,7 @@ namespace Chrome_Updater
                     MessageBox.Show("Error:\n\r" + ex.Message);
                 }
             }
+            await Task.WhenAll();
         }
         private void CheckLauncher()
         {
@@ -926,34 +1007,34 @@ namespace Chrome_Updater
                 var response = request.GetResponse();
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
-                    var version = reader.ReadToEnd();
-                    FileVersionInfo testm = FileVersionInfo.GetVersionInfo(applicationPath + "\\Bin\\Launcher\\Chrome Launcher.exe");
-                    if (Convert.ToInt32(version.Replace(".", "")) > Convert.ToInt32(testm.FileVersion.Replace(".", "")))
+                    Version version = new Version(reader.ReadToEnd());
+                    Version testm = new Version(FileVersionInfo.GetVersionInfo($"{applicationPath}\\Bin\\Launcher\\Chrome Launcher.exe").FileVersion);
+                    if (version > testm)
                     {
                         reader.Close();
                         try
                         {
                             using (WebClient myWebClient2 = new WebClient())
                             {
-                                myWebClient2.DownloadFile("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Launcher/Launcher.7z", @"Launcher.7z");
+                                myWebClient2.DownloadFile("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Launcher/Launcher.7z", $"{applicationPath}\\Launcher.7z");
                             }
-                            string arguments = " x " + @"Launcher.7z" + " -o" + @"Bin\\Launcher" + " -y";
+                            string arguments = $" x \"{applicationPath}\\Launcher.7z\" -o\"{applicationPath}\\Bin\\Launcher\" -y";
                             Process process = new Process();
-                            process.StartInfo.FileName = @"Bin\7zr.exe";
+                            process.StartInfo.FileName = $"{applicationPath}\\Bin\\7zr.exe";
                             process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
                             process.StartInfo.Arguments = arguments;
                             process.Start();
                             process.WaitForExit();
-                            File.Delete(@"Launcher.7z");
+                            File.Delete($"{applicationPath}\\Launcher.7z");
                             foreach (string launcher in instDir)
                             {
-                                if (File.Exists(launcher + " Launcher.exe"))
+                                if (File.Exists($"{applicationPath}\\{launcher} Launcher.exe"))
                                 {
-                                    FileVersionInfo binLauncher = FileVersionInfo.GetVersionInfo(applicationPath + "\\Bin\\Launcher\\" + launcher + " Launcher.exe");
-                                    FileVersionInfo istLauncher = FileVersionInfo.GetVersionInfo(applicationPath + "\\" + launcher + " Launcher.exe");
-                                    if (Convert.ToDecimal(binLauncher.FileVersion) > Convert.ToDecimal(istLauncher.FileVersion))
+                                    Version binLauncher = new Version(FileVersionInfo.GetVersionInfo($"{applicationPath}\\Bin\\Launcher\\{launcher} Launcher.exe").FileVersion);
+                                    Version istLauncher = new Version(FileVersionInfo.GetVersionInfo($"{applicationPath}\\{launcher} Launcher.exe").FileVersion);
+                                    if (binLauncher > istLauncher)
                                     {
-                                        File.Copy(@"bin\\Launcher\\" + launcher + " Launcher.exe", launcher + " Launcher.exe", true);
+                                        File.Copy($"{applicationPath}\\Bin\\Launcher\\{launcher} Launcher.exe", $"{applicationPath}\\{launcher} Launcher.exe", true);
                                     }
                                 }
                             }
@@ -972,9 +1053,9 @@ namespace Chrome_Updater
         }
         private void VersinsInfoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FileVersionInfo updVersion = FileVersionInfo.GetVersionInfo(applicationPath + "\\Portable Chrome Updater.exe");
-            FileVersionInfo launcherVersion = FileVersionInfo.GetVersionInfo(applicationPath + "\\Bin\\Launcher\\Chrome Launcher.exe");
-            MessageBox.Show("Updater Version - " + updVersion.FileVersion + "\nLauncher Version - " + launcherVersion.FileVersion, "Version Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Version updVersion = new Version(FileVersionInfo.GetVersionInfo($"{applicationPath}\\Portable Chrome Updater.exe").FileVersion);
+            Version launcherVersion = new Version(FileVersionInfo.GetVersionInfo($"{applicationPath}\\Bin\\Launcher\\Chrome Launcher.exe").FileVersion);
+            MessageBox.Show("Updater Version - " + updVersion + "\nLauncher Version - " + launcherVersion, "Version Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         private void RegistrierenToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1189,7 +1270,7 @@ namespace Chrome_Updater
                 }
                 else
                 {
-                    if (Directory.Exists(@"Chrome"))
+                    if (Directory.Exists($"{applicationPath}\\Chrome"))
                     {
                         chromeAlsStandardToolStripMenuItem.Enabled = true;
                     }
@@ -1197,7 +1278,7 @@ namespace Chrome_Updater
                     {
                         chromeAlsStandardToolStripMenuItem.Enabled = false;
                     }
-                    if (Directory.Exists(@"Chrome Stable x86"))
+                    if (Directory.Exists($"{applicationPath}\\Chrome Stable x86"))
                     {
                         chromeStableX86AlsStandardToolStripMenuItem.Enabled = true;
                     }
@@ -1205,7 +1286,7 @@ namespace Chrome_Updater
                     {
                         chromeStableX86AlsStandardToolStripMenuItem.Enabled = false;
                     }
-                    if (Directory.Exists(@"Chrome Stable x64"))
+                    if (Directory.Exists($"{applicationPath}\\Chrome Stable x64"))
                     {
                         chromeStableX64AlsStandardToolStripMenuItem.Enabled = true;
                     }
@@ -1213,7 +1294,7 @@ namespace Chrome_Updater
                     {
                         chromeStableX64AlsStandardToolStripMenuItem.Enabled = false;
                     }
-                    if (Directory.Exists(@"Chrome Beta x86"))
+                    if (Directory.Exists($"{applicationPath}\\Chrome Beta x86"))
                     {
                         chromeBetax86AlsStandardToolStripMenuItem.Enabled = true;
                     }
@@ -1221,7 +1302,7 @@ namespace Chrome_Updater
                     {
                         chromeBetax86AlsStandardToolStripMenuItem.Enabled = false;
                     }
-                    if (Directory.Exists(@"Chrome Beta x64"))
+                    if (Directory.Exists($"{applicationPath}\\Chrome Beta x64"))
                     {
                         chromeBetaX64AlsStandardToolStripMenuItem.Enabled = true;
                     }
@@ -1229,7 +1310,7 @@ namespace Chrome_Updater
                     {
                         chromeBetaX64AlsStandardToolStripMenuItem.Enabled = false;
                     }
-                    if (Directory.Exists(@"Chrome Dev x86"))
+                    if (Directory.Exists($"{applicationPath}\\Chrome Dev x86"))
                     {
                         chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = true;
                     }
@@ -1237,7 +1318,7 @@ namespace Chrome_Updater
                     {
                         chromeDeveloperX86AlsStandardToolStripMenuItem.Enabled = false;
                     }
-                    if (Directory.Exists(@"Chrome Dev x64"))
+                    if (Directory.Exists($"{applicationPath}\\Chrome Dev x64"))
                     {
                         chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = true;
                     }
@@ -1245,7 +1326,7 @@ namespace Chrome_Updater
                     {
                         chromeDeveloperX64AlsStandardToolStripMenuItem.Enabled = false;
                     }
-                    if (Directory.Exists(@"Chrome Canary x86"))
+                    if (Directory.Exists($"{applicationPath}\\Chrome Canary x86"))
                     {
                         chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = true;
                     }
@@ -1253,7 +1334,7 @@ namespace Chrome_Updater
                     {
                         chromeCanaryX86AlsStandardToolStripMenuItem.Enabled = false;
                     }
-                    if (Directory.Exists(@"Chrome Canary x64"))
+                    if (Directory.Exists($"{applicationPath}\\Chrome Canary x64"))
                     {
                         chromeCanaryX64AlsStandardToolStripMenuItem.Enabled = true;
                     }
