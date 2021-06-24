@@ -40,8 +40,9 @@ namespace Chrome_Updater
                 for (int i = 0; i <= 3; i++)
                 {
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                    WebRequest request = WebRequest.Create("http://tools.google.com/service/update2");
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://tools.google.com/service/update2");
                     request.Method = "POST";
+                    request.UserAgent = "Google Update/1.3.36.82;winhttp";
                     request.ContentType = "application/x-www-form-urlencoded";
                     byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.33.23\" shell_version=\"1.3.33.23\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" requestid=\"{11111111-1111-1111-1111-111111111111}\"><os platform=\"win\" version=\"6.1\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[i] + "}\" version=\"\" ap=\"" + arapVersion[i] + "\" lang=\"\" brand=\"\" client=\"\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/></app></request>");
                     request.ContentLength = byteArray.Length;
@@ -388,8 +389,9 @@ namespace Chrome_Updater
             List<Task> list = new List<Task>();
             try
             {
-                WebRequest request = WebRequest.Create("http://tools.google.com/service/update2");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://tools.google.com/service/update2");
                 request.Method = "POST";
+                request.UserAgent = "Google Update/1.3.36.82;winhttp";
                 request.ContentType = "application/x-www-form-urlencoded";
                 byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.33.23\" shell_version=\"1.3.33.23\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" requestid=\"{11111111-1111-1111-1111-111111111111}\"><os platform=\"win\" version=\"6.1\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[a] + "}\" version=\"\" ap=\"" + arapVersion[d - 1] + "\" lang=\"\" brand=\"\" client=\"\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/></app></request>");
                 request.ContentLength = byteArray.Length;
