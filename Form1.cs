@@ -40,7 +40,7 @@ namespace Chrome_Updater
                 for (int i = 0; i <= 3; i++)
                 {
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://tools.google.com/service/update2");
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://tools.google.com/service/update2");
                     request.Method = "POST";
                     request.UserAgent = "Google Update/1.3.36.82;winhttp";
                     request.ContentType = "application/x-www-form-urlencoded";
@@ -389,7 +389,7 @@ namespace Chrome_Updater
             List<Task> list = new List<Task>();
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://tools.google.com/service/update2");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://tools.google.com/service/update2");
                 request.Method = "POST";
                 request.UserAgent = "Google Update/1.3.36.82;winhttp";
                 request.ContentType = "application/x-www-form-urlencoded";
