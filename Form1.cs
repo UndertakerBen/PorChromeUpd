@@ -389,6 +389,7 @@ namespace Chrome_Updater
             List<Task> list = new List<Task>();
             try
             {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://tools.google.com/service/update2");
                 request.Method = "POST";
                 request.UserAgent = "Google Update/1.3.36.82;winhttp";
