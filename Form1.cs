@@ -17,7 +17,7 @@ namespace Chrome_Updater
     {
         public static string[] ring = new string[4] { "Canary", "Dev", "Beta", "Stable" };
         public static string[] arappid = new string[4] { "4EA16AC7-FD5A-47C3-875B-DBF4A2008C20", "8A69D345-D564-463C-AFF1-A69D9E530F96", "8A69D345-D564-463C-AFF1-A69D9E530F96", "8A69D345-D564-463C-AFF1-A69D9E530F96" };
-        public static string[] arapVersion = new string[8] { "x86", "x86-dev-statsdef_1", "x86-beta-statsdef_1", "x86-stable-statsdef_1", "x64", "x64-dev-statsdef_1", "x64-beta-statsdef_1", "x64-stable-statsdef_1" };
+        public static string[] arapVersion = new string[8] { "-statsdef_1", "x86-dev-statsdef_1", "x86-beta-statsdef_1", "x86-stable-statsdef_1", "x64-canary-statsdef_1", "x64-dev-statsdef_1", "x64-beta-statsdef_1", "x64-stable-statsdef_1" };
         public static string[] ring2 = new string[8] { "Canary", "Developer", "Beta", "Stable", "Canary", "Developer", "Beta", "Stable" };
         public static string[] buildversion = new string[8];
         public static string[] architektur = new string[2] { "X86", "X64" };
@@ -42,9 +42,9 @@ namespace Chrome_Updater
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://tools.google.com/service/update2");
                     request.Method = "POST";
-                    request.UserAgent = "Google Update/1.3.36.82;winhttp";
+                    request.UserAgent = "Google Update/1.3.36.152;winhttp";
                     request.ContentType = "application/x-www-form-urlencoded";
-                    byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.33.23\" shell_version=\"1.3.33.23\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" requestid=\"{11111111-1111-1111-1111-111111111111}\"><os platform=\"win\" version=\"6.1\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[i] + "}\" version=\"\" ap=\"" + arapVersion[i] + "\" lang=\"\" brand=\"\" client=\"\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/></app></request>");
+                    byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.36.152\" shell_version=\"1.3.36.151\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" installsource=\"taggedmi\" requestid=\"{11111111-1111-1111-1111-111111111111}\" dedup=\"cr\" domainjoined=\"0\"><hw physmemory=\"16\" sse=\"1\" sse2=\"1\" sse3=\"1\" ssse3=\"1\" sse41=\"1\" sse42=\"1\" avx=\"1\"/><os platform=\"win\" version=\"10.0.22621.1028\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[i] + "}\" version=\"\" nextversion=\"\" ap=\"" + arapVersion[i] + "\" lang=\"de\" brand=\"\" client=\"\" installage=\"-1\" installdate=\"-1\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/><data name=\"install\" index=\"empty\"/></app></request>");
                     request.ContentLength = byteArray.Length;
                     Stream dataStream = request.GetRequestStream();
                     dataStream.Write(byteArray, 0, byteArray.Length);
@@ -394,7 +394,7 @@ namespace Chrome_Updater
                 request.Method = "POST";
                 request.UserAgent = "Google Update/1.3.36.82;winhttp";
                 request.ContentType = "application/x-www-form-urlencoded";
-                byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.33.23\" shell_version=\"1.3.33.23\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" requestid=\"{11111111-1111-1111-1111-111111111111}\"><os platform=\"win\" version=\"6.1\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[a] + "}\" version=\"\" ap=\"" + arapVersion[d - 1] + "\" lang=\"\" brand=\"\" client=\"\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/></app></request>");
+                byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.36.152\" shell_version=\"1.3.36.151\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" installsource=\"taggedmi\" requestid=\"{11111111-1111-1111-1111-111111111111}\" dedup=\"cr\" domainjoined=\"0\"><hw physmemory=\"16\" sse=\"1\" sse2=\"1\" sse3=\"1\" ssse3=\"1\" sse41=\"1\" sse42=\"1\" avx=\"1\"/><os platform=\"win\" version=\"10.0.22621.1028\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[a] + "}\" version=\"\" nextversion=\"\" ap=\"" + arapVersion[d - 1] + "\" lang=\"de\" brand=\"\" client=\"\" installage=\"-1\" installdate=\"-1\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/><data name=\"install\" index=\"empty\"/></app></request>");
                 request.ContentLength = byteArray.Length;
                 Stream dataStream = request.GetRequestStream();
                 dataStream.Write(byteArray, 0, byteArray.Length);
