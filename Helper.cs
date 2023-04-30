@@ -1,9 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
 namespace Chrome_Updater
 {
+    public static class ConfigHelper
+    {
+        public static Dictionary<string, string> GetConfig(string path)
+        {
+            var config = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var line in File.ReadAllLines(path))
+            {
+                var i = line.IndexOf('=');
+                if (i > 0)
+                {
+                    var k = line.Substring(0, i).Trim();
+                    var v = line.Substring(i + 1).Trim();
+                    if (!string.IsNullOrEmpty(k))
+                    {
+                        config[k] = v;
+                    }
+                }
+            }
+            return config;
+        }
+    }
 
     public static class ShortcutHelper
     {

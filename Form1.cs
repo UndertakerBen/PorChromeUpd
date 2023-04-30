@@ -30,13 +30,17 @@ namespace Chrome_Updater
         private readonly CultureInfo culture1 = CultureInfo.CurrentUICulture;
         private readonly string[] CommandLineArgs = Environment.GetCommandLineArgs();
         private readonly ToolTip toolTip = new ToolTip();
+        private Label[] labels = null;
+        private Button[] buttons = null;
+        private static string[] envs = new string[4] { "LAUNCHER_URL", "VERSION_URL", "UPDATE_URL", "DOWNLOAD_REPLACE" };
 
         // all url
-        private static string[] chromeDownloadReplace = new string[2] { "https://www.google.com/dl", "https://dl.google.com" };
-        private static readonly string launcherUrl = "https://raw.fastgit.org/UndertakerBen/PorChromeUpd/master/Launcher/Launcher.7z";
-        private static readonly string versionUrl = "https://raw.fastgit.org/UndertakerBen/PorChromeUpd/master/Version.txt";
-        private static readonly string updateUrl = "https://download.fastgit.org/UndertakerBen/PorChromeUpd/releases/download/v${version}/Portable.Chrome.Updater.v${version}.7z";
-        private static readonly string chromeUpdateUrl = "https://tools.google.com/service/update2";
+        private static string launcherUrl = "https://raw.githubusercontent.com/UndertakerBen/PorChromeUpd/master/Launcher/Launcher.7z";
+        private static string versionUrl = "https://raw.githubusercontent.com/UndertakerBen/PorChromeUpd/master/Version.txt";
+        private static string updateUrl = "https://github.com/UndertakerBen/PorChromeUpd/releases/download/v{version}/Portable.Chrome.Updater.v{version}.7z";
+
+        private static string[] chromeDownloadReplace = null;
+        private static string chromeUpdateUrl = "https://tools.google.com/service/update2";
         private static readonly string chromeUpdateBody = @"<?xml version=""1.0"" encoding=""UTF-8""?>
 <request
     protocol=""3.0""
@@ -44,9 +48,9 @@ namespace Chrome_Updater
     updaterversion=""1.3.36.152""
     shell_version=""1.3.36.151""
     ismachine=""0""
-    sessionid=""{11111111-1111-1111-1111-111111111111}""
+    sessionid=""{{11111111-1111-1111-1111-111111111111}}""
     installsource=""taggedmi""
-    requestid=""{11111111-1111-1111-1111-111111111111}""
+    requestid=""{{11111111-1111-1111-1111-111111111111}}""
     dedup=""cr""
     domainjoined=""0"">
     <hw
@@ -60,16 +64,16 @@ namespace Chrome_Updater
         avx=""1""/>
     <os platform=""win"" version=""10.0.22621.1028"" sp="""" arch=""x64""/>
     <app
-        appid=""{${appid}}""
+        appid=""{{{0}}}""
         version=""""
         nextversion=""""
-        ap=""${ap}""
+        ap=""{1}""
         lang=""de""
         brand=""""
         client=""""
         installage=""-1""
         installdate=""-1""
-        iid=""{11111111-1111-1111-1111-111111111111}"">
+        iid=""{{11111111-1111-1111-1111-111111111111}}"">
         <updatecheck/>
         <data name=""install"" index=""empty""/>
     </app>
@@ -77,27 +81,71 @@ namespace Chrome_Updater
         public Form1()
         {
             InitializeComponent();
-            label2.Text = "loading……";
-            label4.Text = "loading……";
-            label6.Text = "loading……";
-            label8.Text = "loading……";
-            button1.Enabled = false;
-            button2.Enabled = false;
-            button3.Enabled = false;
-            button4.Enabled = false;
-            button5.Enabled = false;
-            button6.Enabled = false;
-            button7.Enabled = false;
-            button8.Enabled = false;
+            initConfig();
+            labels = new Label[4] { label2, label4, label6, label8 };
+            buttons = new Button[8] { button1, button5, button2, button6, button3, button7, button4, button8 };
+            foreach (Button b in buttons)
+            {
+                b.Enabled = false;
+            }
+            // use not block ui
             Task.Run(initCheck);
+        }
+
+        private void initConfig()
+        {
+
+            var config = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var configPath = $"{applicationPath}\\config.ini";
+            if (File.Exists(configPath))
+            {
+                config = ConfigHelper.GetConfig(configPath);
+            }
+            foreach (string env in envs)
+            {
+                string v = null;
+                if (config.ContainsKey(env))
+                {
+                    v = config[env];
+                }
+                /*if (string.IsNullOrEmpty(v))
+                {
+                    v = Environment.GetEnvironmentVariable($"PCU_{env}");
+                }*/
+                if (!string.IsNullOrEmpty(v))
+                {
+                    v = v.Trim();
+                    switch (env)
+                    {
+                        case "LAUNCHER_URL":
+                            launcherUrl = v;
+                            break;
+                        case "VERSION_URL":
+                            versionUrl = v;
+                            break;
+                        case "UPDATE_URL":
+                            updateUrl = v;
+                            break;
+                        case "DOWNLOAD_REPLACE":
+                            var arr = v.Split(',');
+                            if (arr.Length == 2)
+                            {
+                                chromeDownloadReplace = arr;
+                            }
+                            break;
+                    }
+                }
+            }
         }
 
         private async Task initCheck()
         {
             try
             {
+                const string loading = "loading……";
                 for (int i = 0; i <= 3; i++)
                 {
+                    labels[i].Text = loading;
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Form1.chromeUpdateUrl);
                     request.Method = "POST";
@@ -116,6 +164,10 @@ namespace Chrome_Updater
                         string[] URL = responseFromServer.Substring(responseFromServer.IndexOf("manifest version=")).Split(new char[] { '"' });
                         buildversion[i] = URL[1];
                         buildversion[i + 4] = URL[1];
+                        labels[i].Text = buildversion[i];
+                        int index = i * 2;
+                        buttons[index].Enabled = true;
+                        buttons[index + 1].Enabled = true;
                     }
                 }
             }
@@ -123,18 +175,6 @@ namespace Chrome_Updater
             {
                 MessageBox.Show("Error: \n\r" + ex.Message);
             }
-            label2.Text = buildversion[0];
-            label4.Text = buildversion[1];
-            label6.Text = buildversion[2];
-            label8.Text = buildversion[3];
-            button1.Enabled = true;
-            button2.Enabled = true;
-            button3.Enabled = true;
-            button4.Enabled = true;
-            button5.Enabled = true;
-            button6.Enabled = true;
-            button7.Enabled = true;
-            button8.Enabled = true;
             Refresh();
             button9.Enabled = false;
             checkBox2.Enabled = false;
@@ -209,7 +249,7 @@ namespace Chrome_Updater
 
         private static string generateBody(string appid, string ap)
         {
-            return chromeUpdateBody.Replace("${appid}", appid).Replace("${ap}", ap);
+            return string.Format(chromeUpdateBody, appid, ap);
         }
         private async Task TestCheck()
         {
@@ -479,7 +519,12 @@ namespace Chrome_Updater
                     string[] tempURL2 = responseFromServer.Substring(responseFromServer.LastIndexOf("codebase=")).Split(new char[] { '"' });
                     string[] tempURL4 = responseFromServer.Substring(responseFromServer.IndexOf("run=")).Split(new char[] { '"' });
                     string[] tempURL6 = responseFromServer.Substring(responseFromServer.IndexOf("manifest version=")).Split(new char[] { '"' });
-                    Uri uri = new Uri((tempURL2[1] + tempURL4[1]).Replace(chromeDownloadReplace[0], chromeDownloadReplace[1]));
+                    string tempURL = tempURL2[1] + tempURL4[1];
+                    if (chromeDownloadReplace != null)
+                    {
+                        tempURL = tempURL.Replace(chromeDownloadReplace[0], chromeDownloadReplace[1]);
+                    }
+                    Uri uri = new Uri(tempURL);
                     ServicePoint sp = ServicePointManager.FindServicePoint(uri);
                     sp.ConnectionLimit = 2;
                     using (webClient = new WebClient())
@@ -1005,7 +1050,7 @@ namespace Chrome_Updater
                                 using (WebClient myWebClient2 = new WebClient())
                                 {
 
-                                    myWebClient2.DownloadFile(updateUrl.Replace("${version}", version.ToString()), $"{applicationPath}\\Portable.Chrome.Updater.v{version}.7z");
+                                    myWebClient2.DownloadFile(updateUrl.Replace("{version}", version.ToString()), $"{applicationPath}\\Portable.Chrome.Updater.v{version}.7z");
                                 }
                                 File.AppendAllText($"{applicationPath}\\Update.cmd", "@echo off" + "\r\n" +
                                     "timeout /t 5 /nobreak" + "\r\n" +
@@ -1048,7 +1093,7 @@ namespace Chrome_Updater
                         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                         using (WebClient myWebClient2 = new WebClient())
                         {
-                            myWebClient2.DownloadFile(updateUrl.Replace("${version}", version.ToString()), $"{applicationPath}\\Portable.Chrome.Updater.v{version}.7z");
+                            myWebClient2.DownloadFile(updateUrl.Replace("{version}", version.ToString()), $"{applicationPath}\\Portable.Chrome.Updater.v{version}.7z");
                         }
                         File.AppendAllText($"{applicationPath}\\Update.cmd", "@echo off" + "\n" +
                             "timeout /t 2 /nobreak" + "\n" +
