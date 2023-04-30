@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -31,20 +30,80 @@ namespace Chrome_Updater
         private readonly CultureInfo culture1 = CultureInfo.CurrentUICulture;
         private readonly string[] CommandLineArgs = Environment.GetCommandLineArgs();
         private readonly ToolTip toolTip = new ToolTip();
-        
+
+        // all url
+        private static string[] chromeDownloadReplace = new string[2] { "https://www.google.com/dl", "https://dl.google.com" };
+        private static readonly string launcherUrl = "https://raw.fastgit.org/UndertakerBen/PorChromeUpd/master/Launcher/Launcher.7z";
+        private static readonly string versionUrl = "https://raw.fastgit.org/UndertakerBen/PorChromeUpd/master/Version.txt";
+        private static readonly string updateUrl = "https://download.fastgit.org/UndertakerBen/PorChromeUpd/releases/download/v${version}/Portable.Chrome.Updater.v${version}.7z";
+        private static readonly string chromeUpdateUrl = "https://tools.google.com/service/update2";
+        private static readonly string chromeUpdateBody = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<request
+    protocol=""3.0""
+    updater=""Omaha""
+    updaterversion=""1.3.36.152""
+    shell_version=""1.3.36.151""
+    ismachine=""0""
+    sessionid=""{11111111-1111-1111-1111-111111111111}""
+    installsource=""taggedmi""
+    requestid=""{11111111-1111-1111-1111-111111111111}""
+    dedup=""cr""
+    domainjoined=""0"">
+    <hw
+        physmemory=""16""
+        sse=""1""
+        sse2=""1""
+        sse3=""1""
+        ssse3=""1""
+        sse41=""1""
+        sse42=""1""
+        avx=""1""/>
+    <os platform=""win"" version=""10.0.22621.1028"" sp="""" arch=""x64""/>
+    <app
+        appid=""{${appid}}""
+        version=""""
+        nextversion=""""
+        ap=""${ap}""
+        lang=""de""
+        brand=""""
+        client=""""
+        installage=""-1""
+        installdate=""-1""
+        iid=""{11111111-1111-1111-1111-111111111111}"">
+        <updatecheck/>
+        <data name=""install"" index=""empty""/>
+    </app>
+</request>";
         public Form1()
         {
             InitializeComponent();
+            label2.Text = "loading……";
+            label4.Text = "loading……";
+            label6.Text = "loading……";
+            label8.Text = "loading……";
+            button1.Enabled = false;
+            button2.Enabled = false;
+            button3.Enabled = false;
+            button4.Enabled = false;
+            button5.Enabled = false;
+            button6.Enabled = false;
+            button7.Enabled = false;
+            button8.Enabled = false;
+            Task.Run(initCheck);
+        }
+
+        private async Task initCheck()
+        {
             try
             {
                 for (int i = 0; i <= 3; i++)
                 {
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://tools.google.com/service/update2");
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Form1.chromeUpdateUrl);
                     request.Method = "POST";
                     request.UserAgent = "Google Update/1.3.36.152;winhttp";
                     request.ContentType = "application/x-www-form-urlencoded";
-                    byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.36.152\" shell_version=\"1.3.36.151\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" installsource=\"taggedmi\" requestid=\"{11111111-1111-1111-1111-111111111111}\" dedup=\"cr\" domainjoined=\"0\"><hw physmemory=\"16\" sse=\"1\" sse2=\"1\" sse3=\"1\" ssse3=\"1\" sse41=\"1\" sse42=\"1\" avx=\"1\"/><os platform=\"win\" version=\"10.0.22621.1028\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[i] + "}\" version=\"\" nextversion=\"\" ap=\"" + arapVersion[i] + "\" lang=\"de\" brand=\"\" client=\"\" installage=\"-1\" installdate=\"-1\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/><data name=\"install\" index=\"empty\"/></app></request>");
+                    byte[] byteArray = Encoding.UTF8.GetBytes(generateBody(arappid[i], arapVersion[i]));
                     request.ContentLength = byteArray.Length;
                     Stream dataStream = request.GetRequestStream();
                     dataStream.Write(byteArray, 0, byteArray.Length);
@@ -68,6 +127,14 @@ namespace Chrome_Updater
             label4.Text = buildversion[1];
             label6.Text = buildversion[2];
             label8.Text = buildversion[3];
+            button1.Enabled = true;
+            button2.Enabled = true;
+            button3.Enabled = true;
+            button4.Enabled = true;
+            button5.Enabled = true;
+            button6.Enabled = true;
+            button7.Enabled = true;
+            button8.Enabled = true;
             Refresh();
             button9.Enabled = false;
             checkBox2.Enabled = false;
@@ -137,7 +204,12 @@ namespace Chrome_Updater
                 }
             }
             CheckLauncher();
-            _ = TestCheck();
+            await TestCheck();
+        }
+
+        private static string generateBody(string appid, string ap)
+        {
+            return chromeUpdateBody.Replace("${appid}", appid).Replace("${ap}", ap);
         }
         private async Task TestCheck()
         {
@@ -390,11 +462,11 @@ namespace Chrome_Updater
             try
             {
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://tools.google.com/service/update2");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Form1.chromeUpdateUrl);
                 request.Method = "POST";
                 request.UserAgent = "Google Update/1.3.36.82;winhttp";
                 request.ContentType = "application/x-www-form-urlencoded";
-                byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><request protocol=\"3.0\" updater=\"Omaha\" updaterversion=\"1.3.36.152\" shell_version=\"1.3.36.151\" ismachine=\"0\" sessionid=\"{11111111-1111-1111-1111-111111111111}\" installsource=\"taggedmi\" requestid=\"{11111111-1111-1111-1111-111111111111}\" dedup=\"cr\" domainjoined=\"0\"><hw physmemory=\"16\" sse=\"1\" sse2=\"1\" sse3=\"1\" ssse3=\"1\" sse41=\"1\" sse42=\"1\" avx=\"1\"/><os platform=\"win\" version=\"10.0.22621.1028\" sp=\"\" arch=\"x64\"/><app appid=\"{" + arappid[a] + "}\" version=\"\" nextversion=\"\" ap=\"" + arapVersion[d - 1] + "\" lang=\"de\" brand=\"\" client=\"\" installage=\"-1\" installdate=\"-1\" iid=\"{11111111-1111-1111-1111-111111111111}\"><updatecheck/><data name=\"install\" index=\"empty\"/></app></request>");
+                byte[] byteArray = Encoding.UTF8.GetBytes(generateBody(arappid[a], arapVersion[d - 1]));
                 request.ContentLength = byteArray.Length;
                 Stream dataStream = request.GetRequestStream();
                 dataStream.Write(byteArray, 0, byteArray.Length);
@@ -407,7 +479,7 @@ namespace Chrome_Updater
                     string[] tempURL2 = responseFromServer.Substring(responseFromServer.LastIndexOf("codebase=")).Split(new char[] { '"' });
                     string[] tempURL4 = responseFromServer.Substring(responseFromServer.IndexOf("run=")).Split(new char[] { '"' });
                     string[] tempURL6 = responseFromServer.Substring(responseFromServer.IndexOf("manifest version=")).Split(new char[] { '"' });
-                    Uri uri = new Uri(tempURL2[1] + tempURL4[1]);
+                    Uri uri = new Uri((tempURL2[1] + tempURL4[1]).Replace(chromeDownloadReplace[0], chromeDownloadReplace[1]));
                     ServicePoint sp = ServicePointManager.FindServicePoint(uri);
                     sp.ConnectionLimit = 2;
                     using (webClient = new WebClient())
@@ -477,6 +549,10 @@ namespace Chrome_Updater
                                     NewMethod4(b, c, new Version(FileVersionInfo.GetVersionInfo($"{applicationPath}\\Update\\{entpDir[b]}\\chrome-bin\\Chrome.exe").FileVersion), d);
                                 }
                             }
+                            if (!File.Exists($"{applicationPath}\\{instDir[b]} Launcher.exe"))
+                            {
+                                File.Copy($"{applicationPath}\\Bin\\Launcher\\{instDir[b]} Launcher.exe", $"{applicationPath}\\{instDir[b]} Launcher.exe");
+                            }
                             if (checkBox5.Checked)
                             {
                                 if (!File.Exists($"{deskDir}\\{instDir[b]}.lnk"))
@@ -487,10 +563,6 @@ namespace Chrome_Updater
                             else if (File.Exists($"{deskDir}\\{instDir[b]}.lnk") && ($"{applicationPath}\\{instDir[b]}" == "Chrome"))
                             {
                                 NewMethod5(a, b);
-                            }
-                            if (!File.Exists($"{applicationPath}\\{instDir[b]} Launcher.exe"))
-                            {
-                                File.Copy($"{applicationPath}\\Bin\\Launcher\\{instDir[b]} Launcher.exe", $"{applicationPath}\\{instDir[b]} Launcher.exe");
                             }
                             File.Delete($"{applicationPath}\\Chrome_{architektur[c]}_{buildversion[a]}_{ring[a]}.exe");
                             downloadLabel.Text = Langfile.Texts("downUnpfine");
@@ -769,12 +841,12 @@ namespace Chrome_Updater
         }
         private void NewMethod5(int a, int b)
         {
-            IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
-            IWshRuntimeLibrary.IWshShortcut link = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut($"{deskDir}\\{instDir[b]}.lnk");
-            link.IconLocation = $"{applicationPath}\\{instDir[b]}\\Chrome.exe,{icon[a]}";
-            link.WorkingDirectory = applicationPath;
-            link.TargetPath = $"{applicationPath}\\{instDir[b]} Launcher.exe";
-            link.Save();
+            ShortcutHelper.CreateShortcut(
+                $"{deskDir}\\{instDir[b]}.lnk",
+                $"{applicationPath}{instDir[b]} Launcher.exe",
+                workingDirectory: applicationPath,
+                icon: $"{applicationPath}{instDir[b]}\\Chrome.exe,{icon[a]}"
+            );
         }
         private void NewMethod6(string[] instVersion, int a, int b, int c)
         {
@@ -916,7 +988,7 @@ namespace Chrome_Updater
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             try
             {
-                var request = (WebRequest)HttpWebRequest.Create("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Version.txt");
+                var request = (WebRequest)HttpWebRequest.Create(Form1.versionUrl);
                 var response = request.GetResponse();
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
@@ -932,7 +1004,8 @@ namespace Chrome_Updater
                                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                                 using (WebClient myWebClient2 = new WebClient())
                                 {
-                                    myWebClient2.DownloadFile($"https://github.com/UndertakerBen/PorChromeUpd/releases/download/v{version}/Portable.Chrome.Updater.v{version}.7z", $"{applicationPath}\\Portable.Chrome.Updater.v{version}.7z");
+
+                                    myWebClient2.DownloadFile(updateUrl.Replace("${version}", version.ToString()), $"{applicationPath}\\Portable.Chrome.Updater.v{version}.7z");
                                 }
                                 File.AppendAllText($"{applicationPath}\\Update.cmd", "@echo off" + "\r\n" +
                                     "timeout /t 5 /nobreak" + "\r\n" +
@@ -966,7 +1039,7 @@ namespace Chrome_Updater
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 try
                 {
-                    var request2 = (WebRequest)HttpWebRequest.Create("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Version.txt");
+                    var request2 = (WebRequest)HttpWebRequest.Create(Form1.versionUrl);
                     var response2 = request2.GetResponse();
                     using (StreamReader reader = new StreamReader(response2.GetResponseStream()))
                     {
@@ -975,7 +1048,7 @@ namespace Chrome_Updater
                         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                         using (WebClient myWebClient2 = new WebClient())
                         {
-                            myWebClient2.DownloadFile($"https://github.com/UndertakerBen/PorChromeUpd/releases/download/v{version}/Portable.Chrome.Updater.v{version}.7z", $"{applicationPath}\\Portable.Chrome.Updater.v{version}.7z");
+                            myWebClient2.DownloadFile(updateUrl.Replace("${version}", version.ToString()), $"{applicationPath}\\Portable.Chrome.Updater.v{version}.7z");
                         }
                         File.AppendAllText($"{applicationPath}\\Update.cmd", "@echo off" + "\n" +
                             "timeout /t 2 /nobreak" + "\n" +
@@ -1005,7 +1078,7 @@ namespace Chrome_Updater
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             try
             {
-                var request = (WebRequest)HttpWebRequest.Create("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Launcher/Version.txt");
+                var request = (WebRequest)HttpWebRequest.Create(Form1.versionUrl);
                 //request.Proxy = ProxyClass.ProxyServer;
                 var response = request.GetResponse();
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -1019,7 +1092,7 @@ namespace Chrome_Updater
                         {
                             using (WebClient myWebClient2 = new WebClient())
                             {
-                                myWebClient2.DownloadFile("https://github.com/UndertakerBen/PorChromeUpd/raw/master/Launcher/Launcher.7z", $"{applicationPath}\\Launcher.7z");
+                                myWebClient2.DownloadFile(launcherUrl, $"{applicationPath}\\Launcher.7z");
                             }
                             string arguments = $" x \"{applicationPath}\\Launcher.7z\" -o\"{applicationPath}\\Bin\\Launcher\" -y";
                             Process process = new Process();
