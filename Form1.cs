@@ -140,6 +140,17 @@ namespace Chrome_Updater
 
         private async Task initCheck()
         {
+            button9.Enabled = false;
+            checkBox2.Enabled = false;
+            checkBox3.Enabled = false;
+            if (IntPtr.Size != 8)
+            {
+                button5.Visible = false;
+                button6.Visible = false;
+                button7.Visible = false;
+                button8.Visible = false;
+                checkBox3.Visible = false;
+            }
             try
             {
                 const string loading = "loading……";
@@ -176,17 +187,6 @@ namespace Chrome_Updater
                 MessageBox.Show("Error: \n\r" + ex.Message);
             }
             Refresh();
-            button9.Enabled = false;
-            checkBox2.Enabled = false;
-            checkBox3.Enabled = false;
-            if (IntPtr.Size != 8)
-            {
-                button5.Visible = false;
-                button6.Visible = false;
-                button7.Visible = false;
-                button8.Visible = false;
-                checkBox3.Visible = false;
-            }
             if (IntPtr.Size == 8)
             {
                 if (File.Exists($"{applicationPath}\\Chrome Canary x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x64\\Chrome.exe"))
