@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.CompilerServices;
 
 namespace Chrome_Updater
 {
@@ -140,23 +141,39 @@ namespace Chrome_Updater
 
         private async Task initCheck()
         {
-            button9.Enabled = false;
-            checkBox2.Enabled = false;
-            checkBox3.Enabled = false;
-            if (IntPtr.Size != 8)
+            Action initDisable = () =>
             {
-                button5.Visible = false;
-                button6.Visible = false;
-                button7.Visible = false;
-                button8.Visible = false;
-                checkBox3.Visible = false;
-            }
+                button9.Enabled = false;
+                checkBox2.Enabled = false;
+                checkBox3.Enabled = false;
+                if (IntPtr.Size != 8)
+                {
+                    button5.Visible = false;
+                    button6.Visible = false;
+                    button7.Visible = false;
+                    button8.Visible = false;
+                    checkBox3.Visible = false;
+                }
+            };
+            const string loading = "loading……";
+            Action<int> setloading = (index) =>
+            {
+                labels[index].Text = loading;
+            };
+            Action<int> setLables = (i) =>
+            {
+                labels[i].Text = buildversion[i];
+                int index = i * 2;
+                buttons[index].Enabled = true;
+                buttons[index + 1].Enabled = true;
+            };
+
+            this.Invoke(initDisable);
             try
             {
-                const string loading = "loading……";
                 for (int i = 0; i <= 3; i++)
                 {
-                    labels[i].Text = loading;
+                    this.Invoke(setloading, i);
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Form1.chromeUpdateUrl);
                     request.Method = "POST";
@@ -175,10 +192,7 @@ namespace Chrome_Updater
                         string[] URL = responseFromServer.Substring(responseFromServer.IndexOf("manifest version=")).Split(new char[] { '"' });
                         buildversion[i] = URL[1];
                         buildversion[i + 4] = URL[1];
-                        labels[i].Text = buildversion[i];
-                        int index = i * 2;
-                        buttons[index].Enabled = true;
-                        buttons[index + 1].Enabled = true;
+                        this.Invoke(setLables, i);
                     }
                 }
             }
@@ -187,62 +201,66 @@ namespace Chrome_Updater
                 MessageBox.Show("Error: \n\r" + ex.Message);
             }
             Refresh();
-            if (IntPtr.Size == 8)
+            Action after = () =>
             {
-                if (File.Exists($"{applicationPath}\\Chrome Canary x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x64\\Chrome.exe"))
+                if (IntPtr.Size == 8)
                 {
-                    checkBox3.Enabled = false;
-                }
-                if (File.Exists($"{applicationPath}\\Chrome Canary x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x86\\Chrome.exe"))
-                {
-                    checkBox2.Enabled = false;
-                }
-                if (File.Exists($"{applicationPath}\\Chrome Canary x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Canary x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x64\\Chrome.exe"))
-                {
-                    checkBox1.Checked = true;
-                    CheckButton();
-                }
-                else if (!checkBox1.Checked)
-                {
-                    checkBox2.Enabled = false;
-                    checkBox3.Enabled = false;
-                    button9.Enabled = false;
-                    button9.BackColor = Color.FromArgb(244, 244, 244);
-
-                    if (File.Exists($"{applicationPath}\\Chrome\\Chrome.exe"))
+                    if (File.Exists($"{applicationPath}\\Chrome Canary x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x64\\Chrome.exe"))
                     {
-                        CheckButton2();
+                        checkBox3.Enabled = false;
+                    }
+                    if (File.Exists($"{applicationPath}\\Chrome Canary x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x86\\Chrome.exe"))
+                    {
+                        checkBox2.Enabled = false;
+                    }
+                    if (File.Exists($"{applicationPath}\\Chrome Canary x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Canary x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x64\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x64\\Chrome.exe"))
+                    {
+                        checkBox1.Checked = true;
+                        CheckButton();
+                    }
+                    else if (!checkBox1.Checked)
+                    {
+                        checkBox2.Enabled = false;
+                        checkBox3.Enabled = false;
+                        button9.Enabled = false;
+                        button9.BackColor = Color.FromArgb(244, 244, 244);
+
+                        if (File.Exists($"{applicationPath}\\Chrome\\Chrome.exe"))
+                        {
+                            CheckButton2();
+                        }
                     }
                 }
-            }
-            else if (IntPtr.Size != 8)
-            {
-                if (File.Exists($"{applicationPath}\\Chrome Canary x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x86\\Chrome.exe"))
+                else if (IntPtr.Size != 8)
                 {
-                    checkBox1.Checked = true;
-                    checkBox2.Enabled = false;
-                    CheckButton();
-                }
-                else if (!checkBox1.Checked)
-                {
-                    checkBox2.Enabled = false;
-                    button9.Enabled = false;
-                    button9.BackColor = Color.FromArgb(244, 244, 244);
-
-                    if (File.Exists($"{applicationPath}\\Chrome\\Chrome.exe"))
+                    if (File.Exists($"{applicationPath}\\Chrome Canary x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Dev x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Beta x86\\Chrome.exe") || File.Exists($"{applicationPath}\\Chrome Stable x86\\Chrome.exe"))
                     {
-                        CheckButton2();
+                        checkBox1.Checked = true;
+                        checkBox2.Enabled = false;
+                        CheckButton();
+                    }
+                    else if (!checkBox1.Checked)
+                    {
+                        checkBox2.Enabled = false;
+                        button9.Enabled = false;
+                        button9.BackColor = Color.FromArgb(244, 244, 244);
+
+                        if (File.Exists($"{applicationPath}\\Chrome\\Chrome.exe"))
+                        {
+                            CheckButton2();
+                        }
                     }
                 }
-            }
-            foreach (Process proc in Process.GetProcesses())
-            {
-                if (proc.ProcessName.Equals("Chrome"))
+                foreach (Process proc in Process.GetProcesses())
                 {
-                    MessageBox.Show(Langfile.Texts("MeassageRunning"), "Portable Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
+                    if (proc.ProcessName.Equals("Chrome"))
+                    {
+                        MessageBox.Show(Langfile.Texts("MeassageRunning"), "Portable Chrome Updater", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return;
+                    }
                 }
-            }
+            };
+            this.Invoke(after);
             CheckLauncher();
             await TestCheck();
         }
@@ -888,9 +906,9 @@ namespace Chrome_Updater
         {
             ShortcutHelper.CreateShortcut(
                 $"{deskDir}\\{instDir[b]}.lnk",
-                $"{applicationPath}{instDir[b]} Launcher.exe",
+                $"{applicationPath}\\{instDir[b]} Launcher.exe",
                 workingDirectory: applicationPath,
-                icon: $"{applicationPath}{instDir[b]}\\Chrome.exe,{icon[a]}"
+                icon: $"{applicationPath}\\{instDir[b]}\\Chrome.exe,{icon[a]}"
             );
         }
         private void NewMethod6(string[] instVersion, int a, int b, int c)
